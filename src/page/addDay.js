@@ -210,7 +210,7 @@ class AddDaysScreen extends React.Component {
                             date={date}
                             mode="date"
                             format="YYYY-MM-DD"
-                            minDate={year + '-' + month + '-' + day}
+                           // minDate={year + '-' + month + '-' + day}
                             customStyles={customStyles}
                             onDateChange={(date) => { this.setState({ date: date }) }}
                         >

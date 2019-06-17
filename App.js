@@ -10,6 +10,7 @@ import React, {Component} from 'react';
 import { View, StatusBar } from "react-native";
 import { createStackNavigator, createAppContainer,createBottomTabNavigator } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';//https://oblador.github.io/react-native-vector-icons/图标地址
+import SplashScreen from 'react-native-splash-screen';
 
 //路由文件
 import Days from './src/page/days.js';
@@ -118,6 +119,10 @@ const  AppStack = createStackNavigator(
 )
 const AppContainer= createAppContainer(AppStack);
 export default class App extends React.Component {
+  componentDidMount() {
+    // 组件加载完毕之后，隐藏启动页
+    SplashScreen.hide();
+  }
     render() {
         return (
           <Provider store={store}>

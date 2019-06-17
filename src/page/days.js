@@ -12,14 +12,14 @@ const key = '50c6f7517446dbb4d803a1c7f962ebaf';
 const fileName = 'days.txt';
 class DaysScreen extends React.Component {
   //标题
-  static navigationOptions = ({navigation}) => ({
+  static navigationOptions = ({ navigation }) => ({
     headerRight: (
       <TouchableHighlight
         onPress={() => navigation.push('AddDay', {
           id: "-1"
         })}
         underlayColor='rgba(0,0,0,0.2)'
-        style={{marginRight:20,width:35,height:35,borderRadius:50,justifyContent: "center",alignItems: "center",}}
+        style={{ marginRight: 20, width: 35, height: 35, borderRadius: 50, justifyContent: "center", alignItems: "center", }}
       >
         <Ionicons name='md-add' size={35} color="#ffffff" />
       </TouchableHighlight>
@@ -30,7 +30,7 @@ class DaysScreen extends React.Component {
     this.state = {
       daysData: [],
       topDayData: {},
-      loaded:false,//是否加载完成
+      loaded: false,//是否加载完成
     }
   }
   /*
@@ -48,15 +48,15 @@ class DaysScreen extends React.Component {
         that.initData();
       }
     })
-    
+
 
   }
   componentWillReceiveProps(nextProps) {
-    let data=[];
-    const that=this;
+    let data = [];
+    const that = this;
     if (nextProps.GetDayReducer != null) {
       if (nextProps.GetDayReducer.message == 'success') {
-       _readFile(fileName, function (res) {
+        _readFile(fileName, function (res) {
           data = JSON.parse(res);
           that.setState({
             daysData: data,
@@ -92,7 +92,7 @@ class DaysScreen extends React.Component {
               dayNum: getDiffDate(item.startday).dayNum,
               week: getDay(item.startday),
               isTop: count == 0 ? true : false,
-              isPast: getDiffDate(item.startday).text=='已过去'?true:false
+              isPast: getDiffDate(item.startday).text == '已过去' ? true : false
             }
             daysArr.push(dayItem);
             count++;
@@ -123,7 +123,7 @@ class DaysScreen extends React.Component {
           dayNum: getDiffDate(item.date).dayNum,
           week: getDay(item.date),
           isTop: item.isTop,
-          isPast: getDiffDate(item.date).text=='已过去'?true:false
+          isPast: getDiffDate(item.date).text == '已过去' ? true : false
         }
         dataArr.push(dayItem);
       })
@@ -140,13 +140,15 @@ class DaysScreen extends React.Component {
   setDaydata(daysArr) {
     const that = this;
     let data = [];
+    let loaded = false;
     _writeFile(fileName, JSON.stringify(daysArr), function (res) {
       if (res == 1) {
         _readFile(fileName, function (res) {
           data = JSON.parse(res);
           that.setState({
             daysData: data,
-            topDayData: data[that.top(data)]
+            topDayData: data[that.top(data)],
+            loaded: true
           })
         })
       }
@@ -210,35 +212,35 @@ class DaysScreen extends React.Component {
     }*/
     return new Promise((resolve, reject) => {
       fetch(url)
-          .then((response) => {
-              return response.json();
-          })
-          .then((responseData) => {
-              resolve(responseData);
-          })
-          .catch((error) => {
-              reject(error);
-          })
+        .then((response) => {
+          return response.json();
+        })
+        .then((responseData) => {
+          resolve(responseData);
+        })
+        .catch((error) => {
+          reject(error);
+        })
       //resolve(test);
     })
   }
   //列表渲染
   dayItemRender({ item }) {
-    const {navigation}=this.props;
+    const { navigation } = this.props;
     return (
       <TouchableHighlight
         onPress={() => {
           item.isPast
-          ?navigation.push('PastDayDetail', {
-            id: item.id
-          })
-          :navigation.push('AddDay', {
-            id: item.id
-          })
+            ? navigation.push('PastDayDetail', {
+              id: item.id
+            })
+            : navigation.push('AddDay', {
+              id: item.id
+            })
         }}
         underlayColor='rgba(0,0,0,0.2)'
-        style={{marginBottom: 20,paddingLeft: 20,paddingRight:20}}
-        >
+        style={{ marginBottom: 20, paddingLeft: 20, paddingRight: 20 }}
+      >
         <View style={[styles.dayItem, styles.inlineBlock]}>
           <View style={styles.dayItemLeft}>
             <Text style={styles.dayTitle}>{item.title}{item.dateStatus}</Text>
@@ -252,16 +254,64 @@ class DaysScreen extends React.Component {
       </TouchableHighlight>
     )
   }
-  
+
+  show() {
+    const { daysData, topDayData, loaded } = this.state;
+    const isNUll = daysData.length != 0 ? false : true
+    const { navigation } = this.props;
+    if (loaded) {
+      if (isNUll) {
+        return (
+          <View style={styles.NoEvent}>
+            <TouchableHighlight
+              onPress={() => navigation.push('AddDay', {
+                id: "-1"
+              })}
+              underlayColor='#B9B8B6'>
+              <View style={styles.addEventBox}>
+                <Ionicons name='md-add' size={30} color="#B9B8B6" />
+                <Text style={{ color: '#B9B8B6', fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+        )
+      } else {
+        return (
+          <ScrollView>
+            <View style={styles.TopDayCOntainer}>
+              <Text style={styles.topDayDataTitle}>{topDayData.title}{topDayData.dateStatus}</Text>
+              <View style={styles.inlineBlock}>
+                <Text style={styles.topDayDataDayNum}>{topDayData.dayNum}</Text>
+                <Text>{topDayData.unit}</Text>
+              </View>
+              <Text style={styles.topDayDataDate}>{topDayData.date} {topDayData.week}</Text>
+            </View>
+            <View style={styles.dayItemContainer}>
+              <FlatList
+                data={daysData}
+                renderItem={this.dayItemRender.bind(this)}
+                keyExtractor={(item) => item.id}
+              >
+              </FlatList>
+            </View>
+          </ScrollView>
+        )
+      }
+    }
+  }
 
   render() {
-    const { daysData, topDayData,loaded } = this.state;
-    const isNUll=daysData.length !=0?false:true
-    const {navigation}=this.props;
-    
     return (
       <View style={styles.container}>
         {
+          this.show() 
+        }
+      </View>
+    )
+  }
+}
+/*
+{
           !isNUll ?
           <ScrollView>
             <View style={styles.TopDayCOntainer}>
@@ -294,24 +344,21 @@ class DaysScreen extends React.Component {
               </TouchableHighlight>
           </View>
         }
-      </View>
-    )
-  }
-}
+*/
 var styles = StyleSheet.create({
   block: {
     flexDirection: "column",
   },
   inlineBlock: {
     flexDirection: "row",
-    
+
   },
   container: {
-    flex:1,
+    flex: 1,
   },
   TopDayCOntainer: {
-    padding:20,
-    marginBottom:20,
+    padding: 20,
+    marginBottom: 20,
   },
   topDayDataTitle: {
     fontSize: 26,
@@ -324,10 +371,10 @@ var styles = StyleSheet.create({
 
   },
   dayItemContainer: {
-    
+
   },
   dayItem: {
-    
+
   },
   dayItemLeft: {
     flex: 3.8,
@@ -353,25 +400,25 @@ var styles = StyleSheet.create({
     fontSize: 14
   },
   //以下是没有数据时的样式
-  NoEvent:{
-    height:'100%',
-    backgroundColor:'#F2F0EE',
-    flexDirection:"row",
+  NoEvent: {
+    height: '100%',
+    backgroundColor: '#F2F0EE',
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-  addEventBox:{
-    width:170,
-    height:45,
-    borderRadius:12,
+  addEventBox: {
+    width: 170,
+    height: 45,
+    borderRadius: 12,
     borderColor: '#B9B8B6',
     borderWidth: 2,
-    borderStyle:'solid',
-    flexDirection:"row",
+    borderStyle: 'solid',
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingLeft:10,
-    paddingRight:10
+    paddingLeft: 10,
+    paddingRight: 10
   }
 })
 

@@ -13,6 +13,9 @@ const fileName = 'days.txt';
 class PastDayDetail extends React.Component {
     //标题
     static navigationOptions = ({ navigation }) => ({
+        headerStyle: {
+            backgroundColor: '#4B4A50',
+          },
         headerRight: (
             <TouchableHighlight
                 onPress={() => navigation.push('bottomTabNavigator')}
@@ -60,7 +63,7 @@ class PastDayDetail extends React.Component {
         return (
             <View style={styles.container}>
                 <StatusBar
-                    backgroundColor="#4E4D53"
+                    backgroundColor="#4B4A50"
                     barStyle="light-content"
                 />
                 <Card style={styles.daysContainer}>
