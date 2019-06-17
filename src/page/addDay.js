@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, Switch, TextInput, Modal } from "react-native";
+import { View, StyleSheet, TouchableHighlight, Text, Switch, TextInput, ToastAndroid } from "react-native";
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +15,20 @@ const fileName = 'days.txt';
 const year = getTodayDate().year;
 const month = getTodayDate().month;
 const day = getTodayDate().day;
+
+const Toast = (props) => {
+    if (props.visible) {
+      ToastAndroid.showWithGravityAndOffset(
+        props.message,
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50
+      );
+      return null;
+    }
+    return null;
+  };
 class AddDaysScreen extends React.Component {
     //标题
     static navigationOptions = ({ navigation }) => ({
@@ -38,6 +52,8 @@ class AddDaysScreen extends React.Component {
             week: '',
             isTop: false,
             modalVisible: false,
+            toastVisible: false,
+            message:'出错'
         }
         this.saveInfo = this.saveInfo.bind(this);
         this.deleteday = this.deleteday.bind(this);
@@ -71,6 +87,10 @@ class AddDaysScreen extends React.Component {
                     })
                 })
             } else {
+                that.setState({
+                    toastVisible:true,
+                    message:'出错了，请刷新'
+                })
             }
         })
     }
@@ -149,20 +169,32 @@ class AddDaysScreen extends React.Component {
     }
     updateRedux(text, arr) {
         const { dispatch, navigation } = this.props;
+        const that=this;
         _deleteFile(fileName, function (res) {
             if (res == 1) {
                 _writeFile(fileName, JSON.stringify(arr), function () {
-                    if (res == 1) {
+                    if(res==1){
+                        navigation.push('bottomTabNavigator');
+                    }else{
+                        that.setState({
+                            toastVisible:true,
+                            message:'出错了，请重试'
+                        })
+                    }
+                    /*if (res == 1) {
                         text == 'edit' ? dispatch(increase_success()) : dispatch(delete_success());
                         navigation.push('bottomTabNavigator');
                     } else {
                         text == 'edit' ? dispatch(increase_fail()) : dispatch(delete_fail());
                         dispatch(increase_fail());
 
-                    }
+                    }*/
                 })
             } else {
-
+                that.setState({
+                    toastVisible:true,
+                    message:'出错了，请重试'
+                })
             }
         })
     }
@@ -179,14 +211,22 @@ class AddDaysScreen extends React.Component {
                         that.updateRedux('delete', data);
                     })
                 } else {
+                    that.setState({
+                        toastVisible:true,
+                        message:'出错了，请重试'
+                    })
                 }
             })
         }else{
-
+            that.setState({
+                toastVisible:true,
+                message:'出错了，请重试'
+            })
         }
     }
+    
     render() {
-        const { title, isTop, date, week, dayID, modalVisible } = this.state;
+        const { title, isTop, date, week, dayID, modalVisible,message,toastVisible } = this.state;
         return (
             <View style={styles.container}>
                 <View style={{padding:20,width:'100%'}}>
@@ -246,6 +286,10 @@ class AddDaysScreen extends React.Component {
                     confirmBtnText='删除'
                     cancelBtnText='取消'
                 />
+                <Toast
+                    visible={toastVisible}
+                    message={message}
+                    />
             </View>
         )
     }

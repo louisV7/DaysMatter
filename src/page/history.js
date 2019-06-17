@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet,Text,FlatList } from "react-native";
+import { View, StyleSheet,Text,FlatList,ScrollView } from "react-native";
 import { connect } from 'react-redux';
 import {Card} from 'react-native-shadow-cards';
 
@@ -17,45 +17,29 @@ class HistoryScreen extends React.Component {
             historyData:[],
             todayDate:year+'年'+month+'月'+day,
             todayLunarDate:getLunarDateString(getLunarDate(year+'-'+month+'-'+day)),
-            todayWeek:getDay(year+'-'+month+'-'+day)
+            todayWeek:getDay(year+'-'+month+'-'+day),
+            getDataFail:false
         }
     }
     componentDidMount(){
         const that=this;
         const date=month+'/'+day;
         that.fetch(history(date,key)).then((res)=>{
-            that.setState({
-                historyData:res.result
-            })
+            if(res.error_code==0){
+                that.setState({
+                    historyData:res.result
+                })
+            }else{
+                that.setState({
+                    getDataFail:true
+                })
+            }
         })
     }
     fetch(url){
-        var test={
-            "reason": "success",
-            "result": [
-                {
-                    "day": "1/1",
-                    "date": "前45年01月01日",
-                    "title": "罗马共和国开始使用儒略历",
-                    "e_id": "0"
-                },
-                {
-                    "day": "1/1",
-                    "date": "前45年01月01日",
-                    "title": "罗马共和国开始使用儒略历",
-                    "e_id": "1"
-                },
-                {
-                    "day": "1/1",
-                    "date": "前45年01月01日",
-                    "title": "罗马共和国开始使用儒略历",
-                    "e_id": "2"
-                }
-            ],
-            "error_code": 0
-        };
+        
         return new Promise((resolve, reject) => {
-            /*fetch(url)
+            fetch(url)
                 .then((response) => {
                     return response.json();
                 })
@@ -64,8 +48,7 @@ class HistoryScreen extends React.Component {
                 })
                 .catch((error) => {
                     reject(error);
-                })*/
-            resolve(test);
+                })
           })
     }
     historyItem({item}){
@@ -80,7 +63,17 @@ class HistoryScreen extends React.Component {
         )
     }
     render(){
-        const {historyData,todayDate,todayLunarDate}=this.state;
+        const {historyData,todayDate,todayLunarDate,getDataFail}=this.state;
+        /*if(getDataFail){
+            return (
+                <View style={styles.getDataFail}>
+                    <Text >数据获取失败，</Text>
+                    <TouchableHighlight >
+                        <Text>请重试</Text>
+                    </TouchableHighlight>
+                </View>
+            )
+        }*/
         return (
             <View style={styles.container}>
                 <Card cornerRadius={0} opacity={0.3} elevation={5} style={[styles.todayContainer,styles.inlineBlock]}>
@@ -90,13 +83,13 @@ class HistoryScreen extends React.Component {
                     </View>
                     <Text style={styles.topRight}>星期五</Text>
                 </Card>
-                <View style={styles.historyContainer}>
-                <FlatList
-                    data={historyData}
-                    renderItem={this.historyItem.bind(this)}
-                    keyExtractor={(item) => item.e_id}
-                />
-                </View>
+                <ScrollView style={styles.historyContainer}>
+                    <FlatList
+                        data={historyData}
+                        renderItem={this.historyItem.bind(this)}
+                        keyExtractor={(item) => item.e_id}
+                    />
+                </ScrollView>
             </View>
         )
     }
@@ -152,7 +145,15 @@ var styles = StyleSheet.create({
     },
     historyItemRight:{
         flex:0.5
-    }
+    },
+    getDataFail:{
+        flex: 1,
+        //flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0,0,0,0.3)",
+        
+      }
 })
 
 

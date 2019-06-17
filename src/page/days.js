@@ -54,7 +54,7 @@ class DaysScreen extends React.Component {
   componentWillReceiveProps(nextProps) {
     let data = [];
     const that = this;
-    if (nextProps.GetDayReducer != null) {
+    /*if (nextProps.GetDayReducer != null) {
       if (nextProps.GetDayReducer.message == 'success') {
         _readFile(fileName, function (res) {
           data = JSON.parse(res);
@@ -66,7 +66,7 @@ class DaysScreen extends React.Component {
       } else {
 
       }
-    }
+    }*/
   }
   // 第一次进入app初始化数据
   initData() {
@@ -255,6 +255,7 @@ class DaysScreen extends React.Component {
     )
   }
 
+  
   show() {
     const { daysData, topDayData, loaded } = this.state;
     const isNUll = daysData.length != 0 ? false : true
@@ -297,64 +298,30 @@ class DaysScreen extends React.Component {
           </ScrollView>
         )
       }
+    }{
+      return (
+        <View style={styles.loading}>
+          <Text style={{color:'#ffffff'}}>Loading...</Text>
+        </View>
+      );
     }
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        {
-          this.show() 
-        }
-      </View>
-    )
+    return this.show() 
   }
 }
-/*
-{
-          !isNUll ?
-          <ScrollView>
-            <View style={styles.TopDayCOntainer}>
-              <Text style={styles.topDayDataTitle}>{topDayData.title}{topDayData.dateStatus}</Text>
-              <View style={styles.inlineBlock}>
-                <Text style={styles.topDayDataDayNum}>{topDayData.dayNum}</Text>
-                <Text>{topDayData.unit}</Text>
-              </View>
-              <Text style={styles.topDayDataDate}>{topDayData.date} {topDayData.week}</Text>
-            </View>
-            <View style={styles.dayItemContainer}>
-              <FlatList
-                data={daysData}
-                renderItem={this.dayItemRender.bind(this)}
-                keyExtractor={(item) => item.id}
-              >
-              </FlatList>
-            </View>
-          </ScrollView>
-          :<View style={styles.NoEvent}>
-              <TouchableHighlight 
-               onPress={() => navigation.push('AddDay', {
-                  id: "-1"
-                })}
-                underlayColor='#B9B8B6'>
-                <View style={styles.addEventBox}>
-                  <Ionicons  name='md-add' size={30} color="#B9B8B6" />
-                  <Text style={{color:'#B9B8B6',fontSize:20,flex:1,marginLeft:15}}>添加新日子</Text>
-                </View>
-              </TouchableHighlight>
-          </View>
-        }
-*/
+
 var styles = StyleSheet.create({
   block: {
     flexDirection: "column",
   },
   inlineBlock: {
     flexDirection: "row",
-
   },
   container: {
     flex: 1,
+    position:"relative",
   },
   TopDayCOntainer: {
     padding: 20,
@@ -419,6 +386,14 @@ var styles = StyleSheet.create({
     alignItems: "center",
     paddingLeft: 10,
     paddingRight: 10
+  },
+  loading:{
+    flex: 1,
+    //flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    
   }
 })
 
