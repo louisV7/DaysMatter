@@ -117,9 +117,8 @@ var styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         position: "absolute",
-        //justifyContent: "center",
         alignItems: "center",
-        elevation:4
+        elevation:4,//层级
     },
     bg: {
         width: '100%',

@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { View, StatusBar,  } from "react-native";
+import { View, StatusBar, } from "react-native";
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';//https://oblador.github.io/react-native-vector-icons/图标地址
 import SplashScreen from 'react-native-splash-screen';
@@ -22,7 +22,7 @@ import GuidePage from './src/page/guidePage.js';
 import { Provider } from 'react-redux';
 import configureStore from './src/redux/store/store.js';
 const store = configureStore();//创建store
-let appInitialRouteName='bottomTabNavigator';
+let appInitialRouteName = 'bottomTabNavigator';
 
 const getTabBarIcon = (navigation, focused, tintColor) => {
   const { routeName } = navigation.state;
@@ -127,16 +127,22 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFirst:false,
+      isFirst: false,
     }
   }
   componentDidMount() {
     // 组件加载完毕之后，隐藏启动页
-    SplashScreen.hide();
+    this.timer = setTimeout(() => {
+      SplashScreen.hide();
+    }, 2000)
     //this.openApp();
   }
+  //卸载计时器
+  componentWillUnmount() {
+    this.timer && clearTimeout(this.timer);//同时为真的才执行卸载
+  }
   openApp() {
-    const that=this;
+    const that = this;
     //AsyncStorage.removeItem('isFirst')
     AsyncStorage.getItem('isFirst', (error, result) => {
 
@@ -162,7 +168,7 @@ export default class App extends React.Component {
     });
   }
   render() {
-    const that=this;
+    const that = this;
     return (
       <Provider store={store}>
         <StatusBar

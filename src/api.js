@@ -4,3 +4,6 @@ export function history(date,key){
 export function calendar(year,key){
     return `http://v.juhe.cn/calendar/year?year=${year}&key=${key}`;
 }
+export function laohuangli(date,key){
+    return `http://v.juhe.cn/laohuangli/d?date=${date}&key=${key}`;
+}

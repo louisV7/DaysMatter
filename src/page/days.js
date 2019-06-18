@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, ScrollView, FlatList, TouchableHighlight } from "react-native";
+import { View, StyleSheet, Text, ScrollView, FlatList, TouchableHighlight,ActivityIndicator,Image } from "react-native";
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';//https://oblador.github.io/react-native-vector-icons/图标地址
 
@@ -259,11 +259,13 @@ class DaysScreen extends React.Component {
     }{
       return (
         <View style={styles.loading}>
-          <Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
+          <ActivityIndicator size="large" color="#53CDFF" />
         </View>
       );
     }
   }
+  //<Image source={require('../images/loading.gif')}></Image>
+  //<Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
 
   render() {
     return this.show() 

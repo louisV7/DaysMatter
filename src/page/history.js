@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import { View, StyleSheet,Text,FlatList,ScrollView } from "react-native";
+import { View, StyleSheet,Text,FlatList,ScrollView,ActivityIndicator } from "react-native";
 import { connect } from 'react-redux';
 import {Card} from 'react-native-shadow-cards';
 
-import {history,calendar} from '../api.js';
+import {history,calendar,laohuangli} from '../api.js';
 import {getLunarDate,getLunarDateString,getTodayDate,getDay} from '../util.js';
 const key='b469258df91094c4b3b82edabcad82c0';
 const year=getTodayDate().year;
@@ -19,7 +19,9 @@ class HistoryScreen extends React.Component {
             todayLunarDate:getLunarDateString(getLunarDate(year+'-'+month+'-'+day)),
             todayWeek:getDay(year+'-'+month+'-'+day),
             getDataFail:false,
-            loaded:false
+            loaded:false,
+            suitable:'',
+            avoid:''
         }
     }
     componentDidMount(){
@@ -36,6 +38,16 @@ class HistoryScreen extends React.Component {
                 that.setState({
                     getDataFail:true
                 })
+            }
+        })
+        that.fetch(laohuangli(year+'-'+month+'-'+day,'c18aec5d6c41cb971544cb2c7c919b9f')).then((res)=>{
+            if(res.error_code==0){
+                that.setState({
+                    suitable:res.result.yi,
+                    avoid:res.result.ji
+                })
+            }else{
+                alert('出错了')
             }
         })
     }
@@ -66,7 +78,7 @@ class HistoryScreen extends React.Component {
         )
     }
     render(){
-        const {historyData,todayDate,todayLunarDate,getDataFail,loaded}=this.state;
+        const {historyData,todayDate,todayLunarDate,getDataFail,loaded,suitable,avoid}=this.state;
         /*if(getDataFail){
             return (
                 <View style={styles.getDataFail}>
@@ -80,18 +92,30 @@ class HistoryScreen extends React.Component {
         if(!loaded){
             return (
                 <View style={styles.loading}>
-                    <Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
+                    <ActivityIndicator size="large" color="#53CDFF" />
                 </View>
             )
         }else{
             return (
                 <View style={styles.container}>
-                    <Card cornerRadius={0} opacity={0.3} elevation={5} style={[styles.todayContainer,styles.inlineBlock]}>
-                        <View style={styles.topLeft}>
-                            <Text style={styles.date}>{todayDate}</Text>
-                            <Text style={styles.LunarDate}>{todayLunarDate}</Text>
+                    <Card cornerRadius={0} opacity={0.3} elevation={5} style={styles.todayContainer}>
+                        <View style={styles.todayDate} >
+                            <View style={styles.topLeft}>
+                                <Text style={styles.date}>{todayDate}</Text>
+                                <Text style={styles.LunarDate}>{todayLunarDate}</Text>
+                            </View>
+                            <Text style={styles.topRight}>星期五</Text>
                         </View>
-                        <Text style={styles.topRight}>星期五</Text>
+                        <View style={styles.stuff}>
+                            <View style={styles.stuffItem}>
+                                <Text style={styles.suitable}>宜</Text>
+                                <Text style={{flex:7,paddingLeft:5,color:'#999999'}}>{suitable}</Text>
+                            </View>
+                            <View style={[styles.stuffItem,styles.stuffItem1]}>
+                                <Text style={styles.avoid}>忌</Text>
+                                <Text style={{flex:7,paddingLeft:5,color:'#999999'}}>{avoid}</Text>
+                            </View>
+                        </View>
                     </Card>
                     <ScrollView style={styles.historyContainer}>
                         <FlatList
@@ -117,25 +141,55 @@ var styles = StyleSheet.create({
         
     },
     todayContainer:{
+        paddingTop:10,
+        paddingBottom: 10,
         paddingLeft:20,
         paddingRight: 20,
-        height:80,
+        //height:120,
         width:'100%',
-        alignItems: "center", 
+    },
+    todayDate:{
+        width:'100%',
+        flexDirection: "row",
     },
     topLeft:{
         flex:3
     },
     date:{
-        fontSize:20
+        fontSize:18
     },
     LunarDate:{
-        fontSize:16
+        fontSize:14,
+        color:'#999999'
     },
     topRight:{
         flex:2,
         fontSize:26,
         textAlign:'right'
+    },
+    stuff:{
+        width:'100%',
+        marginTop: 10,
+    },
+    stuffItem:{
+        flexDirection: "row",
+    },
+    stuffItem1:{
+        marginTop: 10,
+    },
+    suitable:{
+        flex:1,
+        color:'#288E09',
+        borderRightWidth: 1,
+        borderRightColor:'#999999',
+        textAlign:"center"
+    },
+    avoid:{
+        flex:1,
+        color:'#F84D33',
+        borderRightWidth: 1,
+        borderRightColor:'#999999',
+        textAlign:"center"
     },
     historyContainer:{
         padding:20

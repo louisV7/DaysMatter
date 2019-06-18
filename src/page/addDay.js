@@ -53,7 +53,8 @@ class AddDaysScreen extends React.Component {
             isTop: false,
             modalVisible: false,
             toastVisible: false,
-            message:'出错'
+            message:'出错',
+            switchThumbColor:''
         }
         this.saveInfo = this.saveInfo.bind(this);
         this.deleteday = this.deleteday.bind(this);
@@ -82,6 +83,7 @@ class AddDaysScreen extends React.Component {
                                 date: data[index].date,
                                 week: data[index].week,
                                 isTop: data[index].isTop,
+                                switchThumbColor:data[index].isTop?'#53CDFF':''
                             })
                         }
                     })
@@ -220,9 +222,10 @@ class AddDaysScreen extends React.Component {
             })*/
         }
     }
-    
+   
+
     render() {
-        const { title, isTop, date, week, dayID, modalVisible,message,toastVisible } = this.state;
+        const { title, isTop, date, week, dayID, modalVisible,message,toastVisible,switchThumbColor } = this.state;
         return (
             <View style={styles.container}>
                 <View style={{padding:20,width:'100%'}}>
@@ -257,7 +260,10 @@ class AddDaysScreen extends React.Component {
                             <MaterialCommunityIcons name='format-wrap-top-bottom' size={25} color="#999999"></MaterialCommunityIcons>
                         </View>
                         <Text style={styles.icon} >置顶</Text>
-                        <Switch style={styles.isTop} trackColor={'#53CDFF'} value={isTop} onValueChange={(value) => this.setState({ isTop: value })}></Switch>
+                        <Switch style={styles.isTop} trackColor={'#53CDFF'} thumbColor={switchThumbColor} value={isTop} onValueChange={(value) => this.setState({ 
+                            isTop: value,
+                            switchThumbColor:value?'#53CDFF':''
+                        })}></Switch>
                     </View>
                     <TouchableHighlight
                         onPress={() => this.saveInfo()}
