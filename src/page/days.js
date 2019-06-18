@@ -394,7 +394,7 @@ var styles = StyleSheet.create({
     //flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "#ffffff",
     
   }
 })
