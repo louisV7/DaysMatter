@@ -18,7 +18,8 @@ class HistoryScreen extends React.Component {
             todayDate:year+'年'+month+'月'+day,
             todayLunarDate:getLunarDateString(getLunarDate(year+'-'+month+'-'+day)),
             todayWeek:getDay(year+'-'+month+'-'+day),
-            getDataFail:false
+            getDataFail:false,
+            loaded:false
         }
     }
     componentDidMount(){
@@ -27,9 +28,11 @@ class HistoryScreen extends React.Component {
         that.fetch(history(date,key)).then((res)=>{
             if(res.error_code==0){
                 that.setState({
-                    historyData:res.result
+                    historyData:res.result,
+                    loaded:true
                 })
             }else{
+                alert('出错了')
                 that.setState({
                     getDataFail:true
                 })
@@ -63,7 +66,7 @@ class HistoryScreen extends React.Component {
         )
     }
     render(){
-        const {historyData,todayDate,todayLunarDate,getDataFail}=this.state;
+        const {historyData,todayDate,todayLunarDate,getDataFail,loaded}=this.state;
         /*if(getDataFail){
             return (
                 <View style={styles.getDataFail}>
@@ -74,24 +77,33 @@ class HistoryScreen extends React.Component {
                 </View>
             )
         }*/
-        return (
-            <View style={styles.container}>
-                <Card cornerRadius={0} opacity={0.3} elevation={5} style={[styles.todayContainer,styles.inlineBlock]}>
-                    <View style={styles.topLeft}>
-                        <Text style={styles.date}>{todayDate}</Text>
-                        <Text style={styles.LunarDate}>{todayLunarDate}</Text>
-                    </View>
-                    <Text style={styles.topRight}>星期五</Text>
-                </Card>
-                <ScrollView style={styles.historyContainer}>
-                    <FlatList
-                        data={historyData}
-                        renderItem={this.historyItem.bind(this)}
-                        keyExtractor={(item) => item.e_id}
-                    />
-                </ScrollView>
-            </View>
-        )
+        if(!loaded){
+            return (
+                <View style={styles.loading}>
+                    <Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
+                </View>
+            )
+        }else{
+            return (
+                <View style={styles.container}>
+                    <Card cornerRadius={0} opacity={0.3} elevation={5} style={[styles.todayContainer,styles.inlineBlock]}>
+                        <View style={styles.topLeft}>
+                            <Text style={styles.date}>{todayDate}</Text>
+                            <Text style={styles.LunarDate}>{todayLunarDate}</Text>
+                        </View>
+                        <Text style={styles.topRight}>星期五</Text>
+                    </Card>
+                    <ScrollView style={styles.historyContainer}>
+                        <FlatList
+                            data={historyData}
+                            renderItem={this.historyItem.bind(this)}
+                            keyExtractor={(item) => item.e_id}
+                        />
+                    </ScrollView>
+                </View>
+            )
+        }
+        
     }
 }
 var styles = StyleSheet.create({
@@ -147,6 +159,14 @@ var styles = StyleSheet.create({
         flex:0.5
     },
     getDataFail:{
+        flex: 1,
+        //flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0,0,0,0.3)",
+        
+      },
+      loading:{
         flex: 1,
         //flexDirection: "row",
         justifyContent: "center",

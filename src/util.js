@@ -1,3 +1,7 @@
+//数组深拷贝
+export function arr_slice_deep_copy(arr) {
+	return arr.slice(0);
+}
 //获取今天的日期
 export function getTodayDate(targetDate) {
     let year,month,day='';

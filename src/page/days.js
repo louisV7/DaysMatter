@@ -54,7 +54,7 @@ class DaysScreen extends React.Component {
   componentWillReceiveProps(nextProps) {
     let data = [];
     const that = this;
-    /*if (nextProps.GetDayReducer != null) {
+    if (nextProps.GetDayReducer != null) {
       if (nextProps.GetDayReducer.message == 'success') {
         _readFile(fileName, function (res) {
           data = JSON.parse(res);
@@ -66,7 +66,7 @@ class DaysScreen extends React.Component {
       } else {
 
       }
-    }*/
+    }
   }
   // 第一次进入app初始化数据
   initData() {
@@ -156,60 +156,19 @@ class DaysScreen extends React.Component {
   }
   //置顶操作
   top(arr) {
-    let index = 0;
-    arr.forEach((item, index) => {
-      if (item.isTop) {
-        index = index;
+    let index=0;
+    for(var i=0;i<arr.length;i++){
+      if(arr[i].isTop){
+        index=i;
+        break;
+      }else{
+        index=0;
       }
-    })
+    }
     return index;
   }
   //获取当年的节日
   fetch(url) {
-    /*var test = {
-      "reason": "Success",
-      "result": {
-        "data": {
-          "holidaylist": "[{\"name\":\"元旦\",\"startday\":\"2018-1-1\"},{\"name\":\"除夕\",\"startday\":\"2018-2-15\"},{\"name\":\"春节\",\"startday\":\"2018-2-16\"},{\"name\":\"清明节\",\"startday\":\"2018-4-5\"},{\"name\":\"劳动节\",\"startday\":\"2018-5-1\"},{\"name\":\"端午节\",\"startday\":\"2018-6-18\"},{\"name\":\"中秋节\",\"startday\":\"2018-9-24\"},{\"name\":\"国庆节\",\"startday\":\"2018-10-1\"}]",
-          "year": "2018",
-          "holiday_list": [
-            {
-              "name": "元旦",
-              "startday": "2019-1-1"
-            },
-            {
-              "name": "除夕",
-              "startday": "2019-2-15"
-            },
-            {
-              "name": "春节",
-              "startday": "2019-2-16"
-            },
-            {
-              "name": "清明节",
-              "startday": "2019-4-5"
-            },
-            {
-              "name": "劳动节",
-              "startday": "2019-5-1"
-            },
-            {
-              "name": "端午节",
-              "startday": "2019-6-18"
-            },
-            {
-              "name": "中秋节",
-              "startday": "2019-9-24"
-            },
-            {
-              "name": "国庆节",
-              "startday": "2019-10-1"
-            }
-          ]
-        }
-      },
-      "error_code": 0
-    }*/
     return new Promise((resolve, reject) => {
       fetch(url)
         .then((response) => {
@@ -221,7 +180,6 @@ class DaysScreen extends React.Component {
         .catch((error) => {
           reject(error);
         })
-      //resolve(test);
     })
   }
   //列表渲染
@@ -239,7 +197,7 @@ class DaysScreen extends React.Component {
             })
         }}
         underlayColor='rgba(0,0,0,0.2)'
-        style={{ marginBottom: 20, paddingLeft: 20, paddingRight: 20 }}
+        style={{ height:55, paddingLeft: 20, paddingRight: 20 }}
       >
         <View style={[styles.dayItem, styles.inlineBlock]}>
           <View style={styles.dayItemLeft}>
@@ -301,7 +259,7 @@ class DaysScreen extends React.Component {
     }{
       return (
         <View style={styles.loading}>
-          <Text style={{color:'#ffffff'}}>Loading...</Text>
+          <Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
         </View>
       );
     }
@@ -341,7 +299,9 @@ var styles = StyleSheet.create({
 
   },
   dayItem: {
-
+    height:55,
+    justifyContent: "center",
+    alignItems: "center",
   },
   dayItemLeft: {
     flex: 3.8,

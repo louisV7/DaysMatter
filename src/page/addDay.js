@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { history, calendar } from '../api.js';
 import { increase_success, increase_fail, delete_success, delete_fail } from '../redux/actions/GetDayAction.js';
-import { getLunarDate, getLunarDateString, getTodayDate, getDiffDate, getDay } from '../util.js';
+import { getLunarDate, getLunarDateString, getTodayDate, getDiffDate, getDay,arr_slice_deep_copy } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
 import DatePicker from '../components/datePicker.js';
 import ConfirmModal from '../components/confirmModal.js';
@@ -87,22 +87,19 @@ class AddDaysScreen extends React.Component {
                     })
                 })
             } else {
-                that.setState({
+                /*that.setState({
                     toastVisible:true,
                     message:'出错了，请刷新'
-                })
+                })*/
             }
         })
     }
     //删除
     deleteday() {
-       
         const that = this;
         that.setState({
             modalVisible:true,
         })
-        
-        
     }
     //保存事件
     saveInfo() {
@@ -132,6 +129,11 @@ class AddDaysScreen extends React.Component {
                         data.push(obj);
                     }else{
                         if (dayID != '-1') {//编辑
+                            let copyData=arr_slice_deep_copy(data);
+                            copyData.forEach((item,index)=>{
+                                item.isTop=false;
+                            })
+                            data=copyData;
                             data[dayID] = {
                                 id: data[dayID].id + '',
                                 unit: data[dayID].unit,
@@ -143,7 +145,7 @@ class AddDaysScreen extends React.Component {
                                 isTop: isTop,
                                 isPast: getDiffDate(date).text == '已过去' ? true : false
                             }
-                        } else {
+                        } else {//新增
                             obj = {
                                 id: (data[data.length - 1].id * 1 + 1) + '',
                                 unit: '天',
@@ -167,34 +169,28 @@ class AddDaysScreen extends React.Component {
             }
         })
     }
+
     updateRedux(text, arr) {
         const { dispatch, navigation } = this.props;
         const that=this;
         _deleteFile(fileName, function (res) {
             if (res == 1) {
                 _writeFile(fileName, JSON.stringify(arr), function () {
-                    if(res==1){
-                        navigation.push('bottomTabNavigator');
-                    }else{
-                        that.setState({
-                            toastVisible:true,
-                            message:'出错了，请重试'
-                        })
-                    }
-                    /*if (res == 1) {
+                    
+                    if (res == 1) {
                         text == 'edit' ? dispatch(increase_success()) : dispatch(delete_success());
                         navigation.push('bottomTabNavigator');
                     } else {
                         text == 'edit' ? dispatch(increase_fail()) : dispatch(delete_fail());
                         dispatch(increase_fail());
 
-                    }*/
+                    }
                 })
             } else {
-                that.setState({
+                /*that.setState({
                     toastVisible:true,
                     message:'出错了，请重试'
-                })
+                })*/
             }
         })
     }
@@ -211,17 +207,17 @@ class AddDaysScreen extends React.Component {
                         that.updateRedux('delete', data);
                     })
                 } else {
-                    that.setState({
+                    /*that.setState({
                         toastVisible:true,
                         message:'出错了，请重试'
-                    })
+                    })*/
                 }
             })
         }else{
-            that.setState({
+            /*that.setState({
                 toastVisible:true,
                 message:'出错了，请重试'
-            })
+            })*/
         }
     }
     
@@ -250,11 +246,10 @@ class AddDaysScreen extends React.Component {
                             date={date}
                             mode="date"
                             format="YYYY-MM-DD"
-                           // minDate={year + '-' + month + '-' + day}
+                            //minDate={year + '-' + month + '-' + day}
                             customStyles={customStyles}
                             onDateChange={(date) => { this.setState({ date: date }) }}
                         >
-
                         </DatePicker>
                     </View>
                     <View style={[styles.inlineBlock, styles.infoItem]}>

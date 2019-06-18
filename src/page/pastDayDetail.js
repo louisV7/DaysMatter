@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import {Card} from 'react-native-shadow-cards';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { history, calendar } from '../api.js';
 import { increase_success, increase_fail, delete_success, delete_fail } from '../redux/actions/GetDayAction.js';
 import { getLunarDate, getLunarDateString } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
+import ConfirmModal from '../components/confirmModal.js';
 const fileName = 'days.txt';
 class PastDayDetail extends React.Component {
     //标题
@@ -30,8 +32,10 @@ class PastDayDetail extends React.Component {
         super(props);
         this.state = {
             dayID:props.navigation.getParam('id','-1'),
-            detailInfo:{}
+            detailInfo:{},
+            modalVisible: false,
         }
+        this.deleteday = this.deleteday.bind(this);
     }
     componentDidMount(){
         const that = this;
@@ -57,9 +61,73 @@ class PastDayDetail extends React.Component {
             }
           })
     }
+    //删除
+    deleteday() {
+        const that = this;
+        that.setState({
+            modalVisible:true,
+        })
+    }
+    updateRedux(text, arr) {
+        const { dispatch, navigation } = this.props;
+        const that=this;
+        _deleteFile(fileName, function (res) {
+            if (res == 1) {
+                _writeFile(fileName, JSON.stringify(arr), function () {
+                    if(res==1){
+                        navigation.push('bottomTabNavigator');
+                    }else{
+                        /*that.setState({
+                            toastVisible:true,
+                            message:'出错了，请重试'
+                        })*/
+                    }
+                    /*if (res == 1) {
+                        text == 'edit' ? dispatch(increase_success()) : dispatch(delete_success());
+                        navigation.push('bottomTabNavigator');
+                    } else {
+                        text == 'edit' ? dispatch(increase_fail()) : dispatch(delete_fail());
+                        dispatch(increase_fail());
+
+                    }*/
+                })
+            } else {
+                /*that.setState({
+                    toastVisible:true,
+                    message:'出错了，请重试'
+                })*/
+            }
+        })
+    }
+    //确认框关闭打开
+    onCloseModal(value){
+        const that = this;
+        const { dayID} = this.state;
+        if(value){
+            _fileEx(fileName, function (res) {
+                if (res) {
+                    _readFile(fileName, function (res) {
+                        data = JSON.parse(res);
+                        data.splice(dayID, 1);
+                        that.updateRedux('delete', data);
+                    })
+                } else {
+                    /*that.setState({
+                        toastVisible:true,
+                        message:'出错了，请重试'
+                    })*/
+                }
+            })
+        }else{
+            /*that.setState({
+                toastVisible:true,
+                message:'出错了，请重试'
+            })*/
+        }
+    }
     render() {
         const {navigation}=this.props;
-        const {detailInfo}=this.state;
+        const {detailInfo,modalVisible}=this.state;
         return (
             <View style={styles.container}>
                 <StatusBar
@@ -89,7 +157,21 @@ class PastDayDetail extends React.Component {
                             <Text style={styles.barText}>新增</Text>
                         </View>
                     </TouchableHighlight>
+                    <TouchableHighlight onPress={() => this.deleteday()} underlayColor='rgba(0,0,0,0.2)' style={styles.barItem}>
+                        <View style={[styles.barItemBox,styles.inlineBlock]}>
+                            <AntDesign style={styles.baricon} name='delete' size={25} color="#999999"></AntDesign>
+                            <Text style={styles.barText}>删除</Text>
+                        </View>
+                    </TouchableHighlight>
                 </View>
+                <ConfirmModal 
+                    onCloseModal={this.onCloseModal.bind(this)}
+                    modalVisible={modalVisible}
+                    title='提示'
+                    content='删除后无法恢复，确定删除吗？'
+                    confirmBtnText='删除'
+                    cancelBtnText='取消'
+                />
             </View>
         )
     }
