@@ -134,7 +134,7 @@ export default class App extends React.Component {
     // 组件加载完毕之后，隐藏启动页
     this.timer = setTimeout(() => {
       SplashScreen.hide();
-    }, 2000)
+    }, 1000)
     //this.openApp();
   }
   //卸载计时器

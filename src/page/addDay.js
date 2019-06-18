@@ -110,6 +110,7 @@ class AddDaysScreen extends React.Component {
         const { navigation } = that.props;
         let data = [];
         let obj = {};
+        let copyData
         title = title != '' ? title : '某天';
         date = date != '' ? date : year + '-' + month + '-' + day;
         _fileEx(fileName, function (res) {
@@ -131,11 +132,15 @@ class AddDaysScreen extends React.Component {
                         data.push(obj);
                     }else{
                         if (dayID != '-1') {//编辑
-                            let copyData=arr_slice_deep_copy(data);
-                            copyData.forEach((item,index)=>{
-                                item.isTop=false;
-                            })
-                            data=copyData;
+                            //let copyData=arr_slice_deep_copy(data);
+                            /*copyData.forEach((item,index)=>{
+                                if(isTop&&item.id==dayID){
+                                    item.isTop=true;
+                                }else{
+                                    item.isTop=false;
+                                }
+                                
+                            })*/
                             data[dayID] = {
                                 id: data[dayID].id + '',
                                 unit: data[dayID].unit,
@@ -146,6 +151,15 @@ class AddDaysScreen extends React.Component {
                                 week: getDay(date),
                                 isTop: isTop,
                                 isPast: getDiffDate(date).text == '已过去' ? true : false
+                            }
+                            if(isTop){
+                                data.forEach((item,index)=>{
+                                    if(item.id!=dayID){
+                                        item.isTop=false;
+                                    }else{
+                                        item.isTop=true;
+                                    }
+                                })
                             }
                         } else {//新增
                             obj = {

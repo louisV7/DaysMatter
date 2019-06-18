@@ -2,6 +2,29 @@
 export function arr_slice_deep_copy(arr) {
 	return arr.slice(0);
 }
+//插入排序
+export function insert_sort(arr,isPast) {
+    var len = arr.length;
+    var temp, j;
+    for(var i = 1; i <= len - 1; i++) {
+        temp = arr[i];
+        j = i;
+        if(isPast){
+            while(j > 0 && new Date ((arr[j - 1].date).replace(/-/ig,'/')).getTime() <=new Date ( (temp.date).replace(/-/ig,'/')).getTime()) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+        }else{
+            while(j > 0 && new Date ((arr[j - 1].date).replace(/-/ig,'/')).getTime() >=new Date ( (temp.date).replace(/-/ig,'/')).getTime()) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+        }
+        
+        arr[j] = temp;
+    }
+    return arr;
+}
 //获取今天的日期
 export function getTodayDate(targetDate) {
     let year,month,day='';
