@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text, FlatList, ScrollView, ActivityIndicator, TouchableHighlight } from "react-native";
 import { connect } from 'react-redux';
 import { Card } from 'react-native-shadow-cards';
+import Feather from 'react-native-vector-icons/Feather';//cloud-rain
+import Ionicons from 'react-native-vector-icons/Ionicons';//多云：ios-partly-sunny，晴天：md-sunny
 
-import { history, calendar, laohuangli } from '../api.js';
+import { history, calendar, laohuangli, weather, baiduMap } from '../api.js';
 import { getLunarDate, getLunarDateString, getTodayDate, getDay } from '../util.js';
-const key = 'b469258df91094c4b3b82edabcad82c0';
+const historyKey = 'b469258df91094c4b3b82edabcad82c0';
+const weatherKey = 'ede618bbdfe67ab7f4d22558c12f0ad7';
+const ChinaCalendarKey = 'c18aec5d6c41cb971544cb2c7c919b9f';
+const baiduAK = '7d23xGmMmVSaORGuq0G5G4Y7QvTMLfZh';
+//const baiduMcode='97:DD:AF:D4:79:E8:6D:50:5E:7B:2F:E1:D2:F0:85:73:E4:A1:C5:27;com.daysmatter';//开发版的
+
 const year = getTodayDate().year;
 const month = getTodayDate().month;
 const day = getTodayDate().day;
@@ -20,13 +27,17 @@ class HistoryScreen extends React.Component {
             todayWeek: getDay(year + '-' + month + '-' + day),
             loaded: false,
             suitable: '',
-            avoid: ''
+            avoid: '',
+            weatherData: {}
         }
     }
     componentDidMount() {
         const that = this;
         const date = month + '/' + day;
-        that.fetch(history(date, key)).then((res) => {
+        //天气
+        that.getWeather();
+        //历史上的今天
+        that.fetch(history(date, historyKey)).then((res) => {
             if (res.error_code == 0) {
                 that.setState({
                     historyData: res.result,
@@ -39,7 +50,9 @@ class HistoryScreen extends React.Component {
                 })
             }
         })
-        that.fetch(laohuangli(year + '-' + month + '-' + day, 'c18aec5d6c41cb971544cb2c7c919b9f')).then((res) => {
+
+        //老黄历
+        /*that.fetch(ChinaCalendar(year + '-' + month + '-' + day, ChinaCalendarKey)).then((res) => {
             if (res.error_code == 0) {
                 that.setState({
                     suitable: res.result.yi,
@@ -51,10 +64,79 @@ class HistoryScreen extends React.Component {
                     avoid: ''
                 })
             }
-        })
+        })*/
     }
-    fetch(url) {
+    //获取天气
+    getWeather() {
+        let city = '';
+        const that = this;
+        that.getCityLocation()
+            .then(res => {
+                //alert(res.result.addressComponent.city)
+                city = res.result.addressComponent.city;
+                //console.log('获取当前位置', res.result.addressComponent.city);
+                //console.log('获取天气的api', weather(city.substr(0,city.length-1), weatherKey));
+                that.fetch(weather(city.substr(0, city.length - 1), weatherKey)).then((res) => {
+                    //console.log(res.result)
+                    if (res.error_code == 0) {
+                        that.setState({
+                            weatherData: res.result,
+                        })
+                    } else {
+                        that.setState({
+                            weatherData: {},
+                        })
+                    }
+                })
+            })
+            .catch(err => {
+                //logWarn('获取失败' + err);
+            });
+    }
+    //获取经纬度
+    getLongitudeAndLatitude() {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+                (location) => {
+                    resolve([location.coords.longitude, location.coords.latitude]);
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    };
+    //获取城市定位信息
+    getCityLocation() {
+        const that = this;
+        return new Promise((resolve, reject) => {
+            that.getLongitudeAndLatitude()
+                //获取经纬度的方法返回的是经纬度组成的数组
+                .then(locationArr => {
+                    let longitude = locationArr[0];
+                    let latitude = locationArr[1];
+                    //alert('longitude=='+longitude+',latitude=='+latitude)
+                    //alert(baiduMap(baiduAK,latitude,longitude))
+                    that.fetch(baiduMap(baiduAK, latitude, longitude)).then((res) => {
+                        //console.log(res)
+                        //alert(res.status)//240
+                        if (res.status == 0) {
+                            resolve(res)
+                        } else {
+                            reject(res.code);
+                        }
+                    })
+                        .catch(error => {
+                            reject(error.code);
+                        });
 
+                })
+                .catch(data => {
+                    reject(data.code);
+                });
+        });
+    };
+    fetch(url) {
         return new Promise((resolve, reject) => {
             fetch(url)
                 .then((response) => {
@@ -68,6 +150,7 @@ class HistoryScreen extends React.Component {
                 })
         })
     }
+    //历史列表
     historyItem({ item }) {
         return (
             <View style={[styles.historyItem, styles.inlineBlock]}>
@@ -79,8 +162,44 @@ class HistoryScreen extends React.Component {
             </View>
         )
     }
+    //天气渲染
+    weatherRender() {
+        const { weatherData } = this.state;
+        //console.log(weatherData)
+        if (JSON.stringify(weatherData) != '{}') {
+            return (
+                <View style={styles.weatherContainer}>
+                    <View style={styles.weatherItem}>
+                        <Feather style={{ marginRight: 5 }} name='cloud-rain' size={25} color="#999999"></Feather>
+                        <Text style={{ fontSize: 18, marginRight: 20 }}>{weatherData.realtime.info}</Text>
+                        {
+                            weatherData.realtime.temperature != '' ?
+                                <Text style={{ fontSize: 35, fontWeight: "bold" }}>{weatherData.realtime.temperature}℃</Text>
+                                : null
+                        }
+                    </View>
+                    <View style={styles.weatherItem}>
+                        {
+                            weatherData.realtime.humidity != '' ?
+                                <Text style={{ marginRight: 15 }}>湿度：{weatherData.realtime.humidity}</Text>
+                                : null
+                        }
+                        <Text style={{ marginRight: 10 }}>{weatherData.realtime.direct} {weatherData.realtime.power}</Text>
+                        {
+                            weatherData.realtime.aqi != '' ?
+                                <Text>空气指数：{weatherData.realtime.aqi}</Text>
+                                : null
+                        }
+                    </View>
+                </View>
+            )
+        }else{
+            return null;
+        }
+
+    }
     render() {
-        const { historyData, todayDate, todayLunarDate, loaded, suitable, avoid } = this.state;
+        const { historyData, todayDate, todayLunarDate, loaded, suitable, avoid, weatherData } = this.state;
         const { navigation } = this.props;
         if (!loaded) {
             return (
@@ -99,24 +218,7 @@ class HistoryScreen extends React.Component {
                             </View>
                             <Text style={styles.topRight}>星期五</Text>
                         </View>
-                        <View style={styles.stuff}>
-                            {
-                                suitable != '' ?
-                                    <View style={styles.stuffItem}>
-                                        <Text style={styles.suitable}>宜</Text>
-                                        <Text style={{ flex: 7, paddingLeft: 5, color: '#999999' }}>{suitable}</Text>
-                                    </View>
-                                    : null
-                            }
-                            {
-                                avoid != '' ?
-                                    <View style={[styles.stuffItem, styles.stuffItem1]}>
-                                        <Text style={styles.avoid}>忌</Text>
-                                        <Text style={{ flex: 7, paddingLeft: 5, color: '#999999' }}>{avoid}</Text>
-                                    </View>
-                                    : null
-                            }
-                        </View>
+                        {this.weatherRender()}
                     </Card>
                     <ScrollView style={styles.historyContainer}>
                         {
@@ -143,7 +245,27 @@ class HistoryScreen extends React.Component {
 
     }
 }
+//<Text style={styles.city}>{weatherData.city}</Text>
 /*
+老黄历
+<View style={styles.stuff}>
+    {
+        suitable != '' ?
+            <View style={styles.stuffItem}>
+                <Text style={styles.suitable}>宜</Text>
+                <Text style={{ flex: 7, paddingLeft: 5, color: '#999999' }}>{suitable}</Text>
+            </View>
+            : null
+    }
+    {
+        avoid != '' ?
+            <View style={[styles.stuffItem, styles.stuffItem1]}>
+                <Text style={styles.avoid}>忌</Text>
+                <Text style={{ flex: 7, paddingLeft: 5, color: '#999999' }}>{avoid}</Text>
+            </View>
+            : null
+    }
+</View>
 
 */
 var styles = StyleSheet.create({
@@ -184,30 +306,20 @@ var styles = StyleSheet.create({
         fontSize: 26,
         textAlign: 'right'
     },
-    stuff: {
+    weatherContainer: {
         width: '100%',
-        marginTop: 10,
     },
-    stuffItem: {
+    city: {
+        width: '100%',
+        textAlign: "center",
+        lineHeight: 40
+    },
+    weatherItem: {
+        width: '100%',
         flexDirection: "row",
+        alignItems: "center",
     },
-    stuffItem1: {
-        marginTop: 10,
-    },
-    suitable: {
-        flex: 1,
-        color: '#288E09',
-        borderRightWidth: 1,
-        borderRightColor: '#999999',
-        textAlign: "center"
-    },
-    avoid: {
-        flex: 1,
-        color: '#F84D33',
-        borderRightWidth: 1,
-        borderRightColor: '#999999',
-        textAlign: "center"
-    },
+
     historyContainer: {
         flex: 1,
         paddingLeft: 20,
@@ -249,7 +361,33 @@ var styles = StyleSheet.create({
         marginTop: 70
     }
 })
-
+/*
+老黄历
+stuff: {
+        width: '100%',
+        marginTop: 10,
+    },
+    stuffItem: {
+        flexDirection: "row",
+    },
+    stuffItem1: {
+        marginTop: 10,
+    },
+    suitable: {
+        flex: 1,
+        color: '#288E09',
+        borderRightWidth: 1,
+        borderRightColor: '#999999',
+        textAlign: "center"
+    },
+    avoid: {
+        flex: 1,
+        color: '#F84D33',
+        borderRightWidth: 1,
+        borderRightColor: '#999999',
+        textAlign: "center"
+    },
+*/
 
 function select(store) {
     return {

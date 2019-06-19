@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableHighlight, Text, Switch, TextInput, ToastAnd
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import Feather from 'react-native-vector-icons/Feather';
 
 import { history, calendar } from '../api.js';
 import { increase_success, increase_fail, delete_success, delete_fail } from '../redux/actions/GetDayAction.js';
@@ -132,15 +132,6 @@ class AddDaysScreen extends React.Component {
                         data.push(obj);
                     }else{
                         if (dayID != '-1') {//编辑
-                            //let copyData=arr_slice_deep_copy(data);
-                            /*copyData.forEach((item,index)=>{
-                                if(isTop&&item.id==dayID){
-                                    item.isTop=true;
-                                }else{
-                                    item.isTop=false;
-                                }
-                                
-                            })*/
                             data[dayID] = {
                                 id: data[dayID].id + '',
                                 unit: data[dayID].unit,
@@ -278,6 +269,13 @@ class AddDaysScreen extends React.Component {
                             isTop: value,
                             switchThumbColor:value?'#53CDFF':''
                         })}></Switch>
+                    </View>
+                    <View style={[styles.inlineBlock, styles.infoItem]}>
+                        <View style={styles.icon}>
+                            <Feather name='repeat' size={25} color="#999999"></Feather>
+                        </View>
+                        <Text style={styles.icon} >重复</Text>
+                        <View style={styles.textinput}></View>
                     </View>
                     <TouchableHighlight
                         onPress={() => this.saveInfo()}
