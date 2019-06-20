@@ -95,7 +95,8 @@ class DaysScreen extends React.Component {
               dayNum: getDiffDate(item.startday).dayNum,
               week: getDay(item.startday),
               isTop: count == 0 ? true : false,
-              isPast: getDiffDate(item.startday).text == '已过去' ? true : false
+              isPast: getDiffDate(item.startday).text == '已过去' ? true : false,
+              repeatText:'不重复'
             }
             daysArr.push(dayItem);
             count++;
@@ -126,7 +127,8 @@ class DaysScreen extends React.Component {
           dayNum: getDiffDate(item.date).dayNum,
           week: getDay(item.date),
           isTop: item.isTop,
-          isPast: getDiffDate(item.date).text == '已过去' ? true : false
+          isPast: getDiffDate(item.date).text == '已过去' ? true : false,
+          repeatText:item.repeatText
         }
         dataArr.push(dayItem);
       })

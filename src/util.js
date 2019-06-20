@@ -1,3 +1,5 @@
+//重复功能
+//export 
 //数组深拷贝
 export function arr_slice_deep_copy(arr) {
 	return arr.slice(0);

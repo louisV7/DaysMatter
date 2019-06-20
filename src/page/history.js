@@ -167,10 +167,17 @@ class HistoryScreen extends React.Component {
         const { weatherData } = this.state;
         //console.log(weatherData)
         if (JSON.stringify(weatherData) != '{}') {
+            let iconName=weatherData.realtime.info.indexOf('多云')||weatherData.realtime.info.indexOf('阴')?"ios-partly-sunny":weatherData.realtime.info.indexOf('晴')
+            ?"md-sunny":weatherData.realtime.info.indexOf('雨')?'cloud-rain':''
             return (
                 <View style={styles.weatherContainer}>
                     <View style={styles.weatherItem}>
-                        <Feather style={{ marginRight: 5 }} name='cloud-rain' size={25} color="#999999"></Feather>
+                        {
+                            iconName =='cloud-rain'?
+                            <Feather style={{ marginRight: 5 }} name={iconName} size={25} color="#999999"></Feather>:
+                            iconName =='ios-partly-sunny'||iconName =='md-sunny'?
+                            <Ionicons style={{ marginRight: 5 }} name={iconName} size={25} color="#999999"></Ionicons>:null
+                        }
                         <Text style={{ fontSize: 18, marginRight: 20 }}>{weatherData.realtime.info}</Text>
                         {
                             weatherData.realtime.temperature != '' ?

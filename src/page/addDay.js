@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, Switch, TextInput, ToastAndroid } from "react-native";
+import { View, StyleSheet, TouchableHighlight, Text, Switch, TextInput, ToastAndroid,Picker } from "react-native";
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,7 +13,6 @@ import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.
 import DatePicker from '../components/datePicker.js';
 import ConfirmModal from '../components/confirmModal.js';
 import Repeat from '../components/repeat.js';
-import Picker from '../components/picker.js';
 const fileName = 'days.txt';
 const year = getTodayDate().year;
 const month = getTodayDate().month;
@@ -55,17 +54,17 @@ class AddDaysScreen extends React.Component {
             week: '',
             isTop: false,
             confirmModalVisible: false,
-            modalVisible: true,
+            repeatModalVisible: false,
+            repeatText:'不重复',
             toastVisible: false,
             message: '出错',
             switchThumbColor: '',
-            repeatText: '不重复',
-            pickerData:[],
+            isRepeat:false,
             defaultIndexs:[1,0]
         }
         this.saveInfo = this.saveInfo.bind(this);
         this.deleteday = this.deleteday.bind(this);
-        this.setRepeat = this.setRepeat.bind(this);
+        //this.setRepeat = this.setRepeat.bind(this);
     }
     componentDidMount() {
         const that = this;
@@ -74,7 +73,6 @@ class AddDaysScreen extends React.Component {
             that.showDetail();
         }
         that.props.navigation.setParams({ navigatePress: that.saveInfo });
-        that.createData()
     }
     //编辑时的信息
     showDetail() {
@@ -92,6 +90,7 @@ class AddDaysScreen extends React.Component {
                                 date: data[index].date,
                                 week: data[index].week,
                                 isTop: data[index].isTop,
+                                repeatText:data[index].repeatText,
                                 switchThumbColor: data[index].isTop ? '#53CDFF' : ''
                             })
                         }
@@ -112,17 +111,11 @@ class AddDaysScreen extends React.Component {
             confirmModalVisible: true,
         })
     }
-    //重复
-    setRepeat() {
-        const that = this;
-        that.setState({
-            modalVisible: true,
-        })
-    }
+    
     //保存事件
     saveInfo() {
         const that = this;
-        let { dayID, title, date, week, isTop } = that.state;
+        let { dayID, title, date, week, isTop,repeatText } = that.state;
         const { navigation } = that.props;
         let data = [];
         let obj = {};
@@ -143,7 +136,8 @@ class AddDaysScreen extends React.Component {
                             dayNum: getDiffDate(date).dayNum,
                             week: getDay(date),
                             isTop: isTop,
-                            isPast: getDiffDate(date).text == '已过去' ? true : false
+                            isPast: getDiffDate(date).text == '已过去' ? true : false,
+                            repeatText:repeatText
                         }
                         data.push(obj);
                     } else {
@@ -157,7 +151,8 @@ class AddDaysScreen extends React.Component {
                                 dayNum: getDiffDate(date).dayNum,
                                 week: getDay(date),
                                 isTop: isTop,
-                                isPast: getDiffDate(date).text == '已过去' ? true : false
+                                isPast: getDiffDate(date).text == '已过去' ? true : false,
+                                repeatText:repeatText
                             }
                             if (isTop) {
                                 data.forEach((item, index) => {
@@ -178,7 +173,8 @@ class AddDaysScreen extends React.Component {
                                 dayNum: getDiffDate(date).dayNum,
                                 week: getDay(date),
                                 isTop: isTop,
-                                isPast: getDiffDate(date).text == '已过去' ? true : false
+                                isPast: getDiffDate(date).text == '已过去' ? true : false,
+                                repeatText:repeatText
                             }
                             data.push(obj);
                         }
@@ -243,46 +239,14 @@ class AddDaysScreen extends React.Component {
             })*/
         }
     }
-
-    createData() {
-        let arr1 = ['不', '周', '月', '年', '天'];
-        let rightArr = [];
-        let leftArr = [];
-        let pickerData=[];
-        for (let i = 0; i < arr1.length; i++) {
-            let obj = {
-                id: i,
-                label: arr1[i] + '重复'
-            };
-            rightArr.push(obj);
-        }
-        for (let i = 0; i < 100; i++) {
-            let obj = {
-                id: i,
-                label: i == 0 ? '不重复' : i == 1 ? '每' : '每' + i
-            };
-            leftArr.push(obj);
-        }
-        for(let i=0;i<rightArr.length;i++){
-            let obj={
-                label:rightArr[i].label,
-                children:leftArr
-            }
-            pickerData.push(obj);
-        }
+    //重复选择关闭打开
+    closeRepeat(){
         this.setState({
-            pickerData:pickerData
+            repeatModalVisible:false
         })
-        //alert(leftArr[0].text)
     }
-    onChange(arr) { // 选中项改变时触发, arr为当前每一级选中项索引，如选中B和Y，此时的arr就等于[1,1]
-        console.log(arr)
-      }
-      onOk(arr) { // 最终确认时触发，arr同上
-        console.log(arr)
-      }
     render() {
-        const { title, isTop, date, week, dayID, confirmModalVisible, modalVisible, message, toastVisible, switchThumbColor, repeatText } = this.state;
+        const { title, isTop, date, week, dayID,isRepeat, confirmModalVisible, message, repeatText, switchThumbColor,repeatModalVisible} = this.state;
         return (
             <View style={styles.container}>
                 <View style={{ padding: 20, width: '100%' }}>
@@ -301,7 +265,7 @@ class AddDaysScreen extends React.Component {
                         <View style={styles.icon}>
                             <AntDesign name='calendar' size={25} color="#999999"></AntDesign>
                         </View>
-                        <Text style={styles.icon} >日期</Text>
+                        <Text style={styles.iconText} >日期</Text>
                         <DatePicker style={styles.datePicker}
                             date={date}
                             mode="date"
@@ -316,7 +280,7 @@ class AddDaysScreen extends React.Component {
                         <View style={styles.icon}>
                             <MaterialCommunityIcons name='format-wrap-top-bottom' size={25} color="#999999"></MaterialCommunityIcons>
                         </View>
-                        <Text style={styles.icon} >置顶</Text>
+                        <Text style={styles.iconText} >置顶</Text>
                         <Switch style={styles.isTop} trackColor={'#53CDFF'} thumbColor={switchThumbColor} value={isTop} onValueChange={(value) => this.setState({
                             isTop: value,
                             switchThumbColor: value ? '#53CDFF' : ''
@@ -326,16 +290,17 @@ class AddDaysScreen extends React.Component {
                         <View style={styles.icon}>
                             <Feather name='repeat' size={25} color="#999999"></Feather>
                         </View>
-                        <Text style={styles.icon} >重复</Text>
-                        <TouchableHighlight
-                            onPress={() => this.setRepeat()}
-                            underlayColor='#ffffff' style={styles.textinput}>
-                            <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", }}>
-                                <Text style={{ marginRight: 20 }}>{repeatText}</Text>
+                        <Text style={styles.iconText} >重复</Text>
+                        <TouchableHighlight style={{flex:4}} underlayColor='#ffffff' onPress={()=>{
+                            this.setState({
+                                repeatModalVisible:true
+                            })
+                        }}>
+                            <View style={{width:'100%',flexDirection: "row",justifyContent: "flex-end",alignItems: "center",}}>
+                                <Text style={{ marginRight: 10 }}>{repeatText}</Text>
                                 <MaterialIcons name='arrow-drop-down' size={25} color="#999999"></MaterialIcons>
                             </View>
                         </TouchableHighlight>
-
                     </View>
                     <TouchableHighlight
                         onPress={() => this.saveInfo()}
@@ -359,19 +324,33 @@ class AddDaysScreen extends React.Component {
                     confirmBtnText='删除'
                     cancelBtnText='取消'
                 />
-                <Toast
-                    visible={toastVisible}
-                    message={message}
-                />
-                <Picker
-                    options={this.state.pickerData}
-                    defaultIndexs={this.state.defaultIndexs}
-                    onChange={this.onChange.bind(this)}
-                    onOk={this.onOk.bind(this)}>></Picker>
+                 <Repeat modalVisible={repeatModalVisible} render={(value1,value2)=>{
+                    this.setState({
+                        repeatText:value1+value2
+                    })
+                 }} isOpen={(value)=>{
+                     this.setState({
+                        repeatModalVisible:false,
+                        repeatText:value
+                    })
+                 }}></Repeat>
             </View>
         )
     }
 }
+/*
+
+ <Toast
+                    visible={toastVisible}
+                    message={message}
+                />
+<ReaptPicker ></ReaptPicker>
+ <Picker
+                    options={this.state.pickerData}
+                    defaultIndexs={this.state.defaultIndexs}
+                    onChange={this.onChange.bind(this)}
+                    onOk={this.onOk.bind(this)}>></Picker>
+*/
 var customStyles = StyleSheet.create({
     dateInput: {
         width: '100%',
@@ -405,7 +384,8 @@ var styles = StyleSheet.create({
     container: {
         alignItems: "center",
         position: "relative",
-        flex: 1
+        flex: 1,
+        //backgroundColor: "red",
     },
     infoItem: {
         justifyContent: "center",
@@ -423,7 +403,15 @@ var styles = StyleSheet.create({
         flex: 4,
     },
     icon: {
-        flex: 1,
+        width:40,
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        //backgroundColor:'yellow',
+    },
+    iconText:{
+        width:40,
+        marginLeft: 3,
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
