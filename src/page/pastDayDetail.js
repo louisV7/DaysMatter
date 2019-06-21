@@ -16,15 +16,17 @@ class PastDayDetail extends React.Component {
     //标题
     static navigationOptions = ({ navigation }) => ({
         headerStyle: {
-            backgroundColor: '#4B4A50',
+            backgroundColor:navigation.getParam('isPast',false)?'#4B4A50':'#53CDFF',
           },
         headerRight: (
             <TouchableHighlight
-                onPress={() => navigation.push('bottomTabNavigator')}
+                onPress={() => navigation.push('AddDay', {
+                id: navigation.getParam('id','-1')
+                })}
                 underlayColor='rgba(0,0,0,0.2)'
                 style={styles.headerRightButtonBox}
             >
-                <Text style={styles.headerRightButton}>列表</Text>
+                <Text style={styles.headerRightButton}>编辑</Text>
             </TouchableHighlight>
         ),
     });
@@ -130,37 +132,40 @@ class PastDayDetail extends React.Component {
         const {detailInfo,modalVisible}=this.state;
         return (
             <View style={styles.container}>
-                <StatusBar
-                    backgroundColor="#4B4A50"
-                    barStyle="light-content"
-                />
+                {
+                    detailInfo.isPast?
+                    <StatusBar
+                        backgroundColor="#4B4A50"
+                        barStyle="light-content"
+                    />:null
+                }
                 <Card style={styles.daysContainer}>
-                    <LinearGradient colors={['#767B7E', '#4B4A50', '#323137']} style={styles.title}>
-                        <Text style={{color:'#ffffff',fontSize:18}}>{detailInfo.title}{detailInfo.dateStatus}</Text>
+                    <LinearGradient colors={detailInfo.isPast?['#767B7E', '#4B4A50', '#323137']:['#90E2F8','#53CDFF','#35A1D0']} style={styles.title}>
+                        <Text allowFontScaling={false} style={{color:'#ffffff',fontSize:18}}>{detailInfo.title}{detailInfo.dateStatus}</Text>
                     </LinearGradient>
                     <View style={[styles.days,styles.inlineBlock]}>
-                        <Text style={{fontSize:66,fontWeight:'bold',flexDirection: "row",alignItems: "center",marginTop:20}}>{detailInfo.dayNum}</Text>
-                        <Text style={{fontSize:14,marginTop:25}}>{detailInfo.unit}</Text>
+                        <Text allowFontScaling={false} style={{fontSize:66,fontWeight:'bold',flexDirection: "row",alignItems: "center",marginTop:20}}>{detailInfo.dayNum}</Text>
+                        <Text allowFontScaling={false} style={{fontSize:14,marginTop:25}}>{detailInfo.unit}</Text>
                     </View>
-                    <Text style={styles.date}>{detailInfo.date}{detailInfo.week}</Text>
+                    <Text allowFontScaling={false} style={styles.date}>{detailInfo.repeatDate}{detailInfo.week}</Text>
                 </Card>
                 <View style={[styles.bottomBar,styles.inlineBlock]}>
                     <TouchableHighlight onPress={() => navigation.push('bottomTabNavigator')} underlayColor='rgba(0,0,0,0.2)' style={styles.barItem}>
                         <View style={[styles.barItemBox,styles.inlineBlock]}>
                             <Entypo style={styles.baricon} name='list' size={25} color="#999999"></Entypo>
-                            <Text style={styles.barText}>列表</Text>
+                            <Text allowFontScaling={false} style={styles.barText}>列表</Text>
                         </View>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => navigation.push('AddDay')} underlayColor='rgba(0,0,0,0.2)' style={styles.barItem}>
                         <View style={[styles.barItemBox,styles.inlineBlock]}>
                             <Entypo style={styles.baricon} name='add-to-list' size={25} color="#999999"></Entypo>
-                            <Text style={styles.barText}>新增</Text>
+                            <Text allowFontScaling={false} style={styles.barText}>新增</Text>
                         </View>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => this.deleteday()} underlayColor='rgba(0,0,0,0.2)' style={styles.barItem}>
                         <View style={[styles.barItemBox,styles.inlineBlock]}>
                             <AntDesign style={styles.baricon} name='delete' size={25} color="#999999"></AntDesign>
-                            <Text style={styles.barText}>删除</Text>
+                            <Text allowFontScaling={false} style={styles.barText}>删除</Text>
                         </View>
                     </TouchableHighlight>
                 </View>

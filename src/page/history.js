@@ -176,25 +176,25 @@ class HistoryScreen extends React.Component {
                             iconName =='cloud-rain'?
                             <Feather style={{ marginRight: 5 }} name={iconName} size={25} color="#999999"></Feather>:
                             iconName =='ios-partly-sunny'||iconName =='md-sunny'?
-                            <Ionicons style={{ marginRight: 5 }} name={iconName} size={25} color="#999999"></Ionicons>:null
+                            <Ionicons style={{ marginRight: 5 }} name={iconName} size={25} color={iconName =='ios-partly-sunny'?"#999999":"#FFCC01"}></Ionicons>:null
                         }
-                        <Text style={{ fontSize: 18, marginRight: 20 }}>{weatherData.realtime.info}</Text>
+                        <Text allowFontScaling={false} style={{ fontSize: 18, marginRight: 20 }}>{weatherData.realtime.info}</Text>
                         {
                             weatherData.realtime.temperature != '' ?
-                                <Text style={{ fontSize: 35, fontWeight: "bold" }}>{weatherData.realtime.temperature}℃</Text>
+                                <Text allowFontScaling={false} style={{ fontSize: 35, fontWeight: "bold" }}>{weatherData.realtime.temperature}℃</Text>
                                 : null
                         }
                     </View>
                     <View style={styles.weatherItem}>
                         {
                             weatherData.realtime.humidity != '' ?
-                                <Text style={{ marginRight: 15 }}>湿度：{weatherData.realtime.humidity}</Text>
+                                <Text allowFontScaling={false} style={{ marginRight: 15 }}>湿度：{weatherData.realtime.humidity}</Text>
                                 : null
                         }
-                        <Text style={{ marginRight: 10 }}>{weatherData.realtime.direct} {weatherData.realtime.power}</Text>
+                        <Text allowFontScaling={false} style={{ marginRight: 10 }}>{weatherData.realtime.direct} {weatherData.realtime.power}</Text>
                         {
                             weatherData.realtime.aqi != '' ?
-                                <Text>空气指数：{weatherData.realtime.aqi}</Text>
+                                <Text allowFontScaling={false}>空气指数：{weatherData.realtime.aqi}</Text>
                                 : null
                         }
                     </View>
@@ -220,10 +220,10 @@ class HistoryScreen extends React.Component {
                     <Card cornerRadius={0} opacity={0.3} elevation={5} style={styles.todayContainer}>
                         <View style={styles.todayDate} >
                             <View style={styles.topLeft}>
-                                <Text style={styles.date}>{todayDate}</Text>
-                                <Text style={styles.LunarDate}>{todayLunarDate}</Text>
+                                <Text allowFontScaling={false} style={styles.date}>{todayDate}</Text>
+                                <Text allowFontScaling={false} style={styles.LunarDate}>{todayLunarDate}</Text>
                             </View>
-                            <Text style={styles.topRight}>星期五</Text>
+                            <Text allowFontScaling={false} style={styles.topRight}>星期五</Text>
                         </View>
                         {this.weatherRender()}
                     </Card>
@@ -236,11 +236,11 @@ class HistoryScreen extends React.Component {
                                     keyExtractor={(item) => item.e_id}
                                 />
                                 : <View style={styles.limit}>
-                                    <Text style={{ fontSize: 18 }}>您要访问的数据去月球了</Text>
+                                    <Text allowFontScaling={false} style={{ fontSize: 18 }}>您要访问的数据去月球了</Text>
                                     <TouchableHighlight underlayColor='#ffffff' onPress={() => navigation.push('AddDay', {
                                         id: "-1"
                                     })}>
-                                        <Text style={{ color: '#53CDFF', fontSize: 18, marginTop: 10 }}>去添加你的新日子吧！</Text>
+                                        <Text allowFontScaling={false} style={{ color: '#53CDFF', fontSize: 18, marginTop: 10 }}>去添加你的新日子吧！</Text>
                                     </TouchableHighlight>
                                 </View>
                         }

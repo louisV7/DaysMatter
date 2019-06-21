@@ -14,7 +14,7 @@ export default class GuidePage extends React.Component {
     render (){
         return (
             <View style={styles.container}>
-                <Text>我是引导页</Text>
+                <Text allowFontScaling={false}>我是引导页</Text>
             </View>
         )
     }

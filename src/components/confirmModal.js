@@ -69,14 +69,14 @@ export default class ConfirmModal extends React.Component {
                     <View ></View>
                 </TouchableHighlight>
                 <View style={styles.modal}>
-                    <Text style={styles.modalTitle}>{title}</Text>
-                    <Text style={styles.modalContent}>{content}</Text>
+                    <Text allowFontScaling={false} style={styles.modalTitle}>{title}</Text>
+                    <Text allowFontScaling={false} style={styles.modalContent}>{content}</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableHighlight underlayColor='#ffffff' onPress={() => this.onPressCancel()} style={styles.button}>
-                            <Text style={styles.cancelBtn}>{cancelBtnText}</Text>
+                            <Text allowFontScaling={false} style={styles.cancelBtn}>{cancelBtnText}</Text>
                         </TouchableHighlight>
                         <TouchableHighlight underlayColor='#ffffff' onPress={() => this.onPressConfirm()} style={styles.button}>
-                            <Text style={styles.confirmBtn}>{confirmBtnText}</Text>
+                            <Text allowFontScaling={false} style={styles.confirmBtn}>{confirmBtnText}</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

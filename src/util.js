@@ -1,78 +1,155 @@
-//重复功能
-//export 
+//重复功能,计算传入的日期在重复标准后的日子
+export function repeatDate(date, repeatcycle) {
+    if (repeatcycle == '不重复') {
+        return date;
+    }
+    let text = repeatcycle.split('重复')[0].split('每')[1];//这个是要重复的周期，是 天，周，月，年或者num天，num周，num月，num年
+    let num = 0;
+    if (text.indexOf('天') != -1) {
+        num = text.split('天').join('') != '' > 1 ? text.split('天')[0] : 1;
+        return getAfterDayDate(date, num);
+    } else if (text.indexOf('周') != -1) {
+        num = text.split('周').join('') != '' ? text.split('周')[0] : 1;
+        return getAfterWeekDate(date, num);
+    } else if (text.indexOf('月') != -1) {
+        num = text.split('月').join('') != '' ? text.split('月')[0] : 1;
+        return getAfterMonthDate(date, num);
+    } else if (text.indexOf('年') != -1) {
+        num = text.split('年').join('') != '' ? text.split('年')[0] : 1;
+        let afterYear = date.split('-')[0] * 1 + num * 1;
+        return afterYear + '-' + date.split('-')[1] + '-' + date.split('-')[2];
+    }
+
+}
+
+export function getAfterDayDate(date, num) {
+    //日期，num重复间隙，distanceTodayNum到今天的天数
+    let distanceTodayNum = getDiffDate(date).dayNum;
+    date = new Date(date.replace(/-/ig, '/'));
+    let cycles = Math.ceil(distanceTodayNum / num)
+    let standard = 1000 * 60 * 60 * 24 * num * cycles;
+    date = + date + standard;
+    let repeatAfterDate = new Date(date);
+    let str = repeatAfterDate.getFullYear() + '-' + (repeatAfterDate.getMonth() + 1) + '-' + repeatAfterDate.getDate();
+    return str
+}
+export function getAfterWeekDate(date, num) {
+    let distanceTodayNum = getDiffDate(date).dayNum;
+    date = new Date(date.replace(/-/ig, '/'));
+    let cycles = Math.ceil(distanceTodayNum / 7 / num * 1)
+    let standard = 1000 * 60 * 60 * 24 * 7 * num * 1 * cycles;
+    date = + date + standard;
+    let repeatAfterDate = new Date(date);
+    let str = repeatAfterDate.getFullYear() + '-' + (repeatAfterDate.getMonth() + 1) + '-' + repeatAfterDate.getDate();
+    return str
+}
+export function getAfterMonthDate(date, num) {
+    date = new Date(date.replace(/-/ig, '/'));
+    // 因为getMonth()获取的月份的值只能在0~11之间所以我们在进行setMonth()之前先给其减一
+    date.setMonth((date.getMonth()) + num * 1);
+    var yy1 = date.getFullYear();
+    var mm1 = date.getMonth() + 1;
+    //console.log(mm1);
+    var dd1 = date.getDate();
+    return yy1 + '-' + mm1 + '-' + dd1;
+}
+//获取指定日期的月份有多少天
+export function getCountDays(date) {
+    var curDate = new Date(date);
+    /* 获取当前月份 */
+    var curMonth = curDate.getMonth();
+    /*  生成实际的月份: 由于curMonth会比实际月份小1, 故需加1 */
+    curDate.setMonth(curMonth + 1);
+    /* 将日期设置为0, 是为了通过下一个月份日期获取当前月份日期的最后一天日期 */
+    curDate.setDate(0);
+    /* 是为了返回当前月份日期的最后一天，即当前月份的天数 */
+    return curDate.getDate();
+}
+
+
 //数组深拷贝
 export function arr_slice_deep_copy(arr) {
-	return arr.slice(0);
+    return arr.slice(0);
 }
+
+
 //插入排序
-export function insert_sort(arr,isPast) {
+export function insert_sort(arr, isPast) {
     var len = arr.length;
     var temp, j;
-    for(var i = 1; i <= len - 1; i++) {
+    for (var i = 1; i <= len - 1; i++) {
         temp = arr[i];
         j = i;
-        if(isPast){
-            while(j > 0 && new Date ((arr[j - 1].date).replace(/-/ig,'/')).getTime() <=new Date ( (temp.date).replace(/-/ig,'/')).getTime()) {
+        if (isPast) {
+            while (j > 0 && new Date((arr[j - 1].date).replace(/-/ig, '/')).getTime() <= new Date((temp.date).replace(/-/ig, '/')).getTime()) {
                 arr[j] = arr[j - 1];
                 j--;
             }
-        }else{
-            while(j > 0 && new Date ((arr[j - 1].date).replace(/-/ig,'/')).getTime() >=new Date ( (temp.date).replace(/-/ig,'/')).getTime()) {
+        } else {
+            while (j > 0 && new Date((arr[j - 1].date).replace(/-/ig, '/')).getTime() >= new Date((temp.date).replace(/-/ig, '/')).getTime()) {
                 arr[j] = arr[j - 1];
                 j--;
             }
         }
-        
+
         arr[j] = temp;
     }
     return arr;
 }
+
+
 //获取今天的日期
 export function getTodayDate(targetDate) {
-    let year,month,day='';
-    year=new Date().getFullYear();
-    month=new Date().getMonth()+1;
-    day=new Date().getDate();
+    let year, month, day = '';
+    year = new Date().getFullYear();
+    month = new Date().getMonth() + 1;
+    day = new Date().getDate();
     return {
-        year:year,
-        month:month,
-        day:day
+        year: year,
+        month: month,
+        day: day
     }
 }
+
+
 //计算到今天的天数
 export function getDiffDate(targetDate) {
-    let result={};
-    let date1 = new Date(targetDate.replace(/-/ig,'/'));
+    let result = {};
+    let date1 = new Date(targetDate.replace(/-/ig, '/'));
     let date2 = new Date();
     date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
     date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
     const diff = date2.getTime() - date1.getTime();
     const diffDate = diff / (24 * 60 * 60 * 1000);
-    if(diffDate==0){//今天
-        result={
-            text:'就是今天',
-            dayNum:0
+    if (diffDate == 0) {//今天
+        result = {
+            text: '就是今天',
+            dayNum: 0
         }
-    }else if(diffDate>0){//过去
-        result={
-            text:'已过去',
-            dayNum:diffDate
+    } else if (diffDate > 0) {//过去
+        result = {
+            text: '已过去',
+            dayNum: diffDate
         }
-    }else{//还没到
-        result={
-            text:'还有',
-            dayNum:Math.abs(diffDate)
+    } else {//还没到
+        result = {
+            text: '还有',
+            dayNum: Math.abs(diffDate)
         }
     }
     return result;
 }
+
+
 //计算星期
-export function getDay(date){
+export function getDay(date) {
     var weekArray = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-    var index=new Date(date.replace(/-/ig,'/')).getDay();
+    var index = new Date(date.replace(/-/ig, '/')).getDay();
     var week = weekArray[index];
     return week;
 }
+
+
 //获取农历日期
 var lunar = {
     tg: '甲乙丙丁戊己庚辛壬癸',
@@ -105,7 +182,7 @@ export function getLunarDate(date) {
     if (year % 4 == 0 && month > 1) {
         total++;
     }
-    for (m = 0;; m++) {
+    for (m = 0; ; m++) {
         k = (lunar.calendar[m] < 0xfff) ? 11 : 12;
         for (n = k; n >= 0; n--) {
             bit = (lunar.calendar[m] >> n) & 1;
@@ -143,7 +220,7 @@ export function getLunarDateString(lunarDate) {
         lunarYear = lunarDate.lunarYear,
         lunarMonth = lunarDate.lunarMonth,
         lunarDay = lunarDate.lunarDay,
-        dateStr='';
+        dateStr = '';
 
     data.tg = lunar.tg.charAt((lunarYear - 4) % 10);
     data.dz = lunar.dz.charAt((lunarYear - 4) % 12);
@@ -154,7 +231,6 @@ export function getLunarDateString(lunarDate) {
     if (lunarDay % 10 != 0 || lunarDay == 10) {
         data.day += lunar.number.charAt((lunarDay - 1) % 10);
     }
-    dateStr=data.tg+data.dz+'年'+data.month+'月'+data.day;
+    dateStr = data.tg + data.dz + '年' + data.month + '月' + data.day;
     return dateStr;
 }
-//获取星期

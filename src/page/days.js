@@ -3,9 +3,10 @@ import { View, StyleSheet, Text, ScrollView, FlatList, TouchableHighlight,Activi
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';//https://oblador.github.io/react-native-vector-icons/图标地址
 
+
 import { history, calendar } from '../api.js';
 import { increase_success, increase_fail, delete_success, delete_fail } from '../redux/actions/GetDayAction.js';
-import { getDiffDate, getDay, getLunarDate, getLunarDateString,insert_sort } from '../util.js';
+import { getDiffDate, getDay, repeatDate,insert_sort } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
 const year = 2019;
 const key = '50c6f7517446dbb4d803a1c7f962ebaf';
@@ -51,7 +52,7 @@ class DaysScreen extends React.Component {
         that.initData();
       }
     })
-
+    
 
   }
   componentWillReceiveProps(nextProps) {
@@ -91,6 +92,7 @@ class DaysScreen extends React.Component {
               unit: '天',
               title: item.name == '元旦' ? "New year " : item.name,
               date: item.startday,
+              repeatDate:item.startday,
               dateStatus: getDiffDate(item.startday).text,
               dayNum: getDiffDate(item.startday).dayNum,
               week: getDay(item.startday),
@@ -118,16 +120,24 @@ class DaysScreen extends React.Component {
       data = JSON.parse(res);
       console.log(data)
       data.forEach((item, index) => {
+        let newDate='';
+        let isPast=getDiffDate(item.date).text == '已过去' ? true : false;
+        if(isPast){
+          newDate=repeatDate(item.date,item.repeatText);
+        }else{
+          newDate=item.date;
+        }
         dayItem = {
           id: item.id + '',
           unit: item.unit,
           title: item.title,
           date: item.date,
-          dateStatus: getDiffDate(item.date).text,
-          dayNum: getDiffDate(item.date).dayNum,
-          week: getDay(item.date),
+          repeatDate:newDate,
+          dateStatus: getDiffDate(newDate).text,
+          dayNum: getDiffDate(newDate).dayNum,
+          week: getDay(newDate),
           isTop: item.isTop,
-          isPast: getDiffDate(item.date).text == '已过去' ? true : false,
+          isPast: getDiffDate(newDate).text == '已过去' ? true : false,
           repeatText:item.repeatText
         }
         dataArr.push(dayItem);
@@ -141,9 +151,7 @@ class DaysScreen extends React.Component {
       })
     })
   }
-  isPast(daysArr){
-
-  }
+  
   //设置state数据
   setDaydata(daysArr) {
     const that = this;
@@ -207,12 +215,9 @@ class DaysScreen extends React.Component {
     return (
       <TouchableHighlight
         onPress={() => {
-          item.isPast
-            ? navigation.push('PastDayDetail', {
-              id: item.id
-            })
-            : navigation.push('AddDay', {
-              id: item.id
+          navigation.push('PastDayDetail', {
+              id: item.id,
+              isPast:item.isPast
             })
         }}
         underlayColor='rgba(0,0,0,0.2)'
@@ -220,15 +225,15 @@ class DaysScreen extends React.Component {
       >
         <View style={[styles.dayItem, styles.inlineBlock]}>
           <View style={styles.dayItemLeft}>
-            <Text style={{fontSize:16,color:item.isPast?'#999999':'#666666'}}>{item.title}{item.dateStatus}</Text>
-            <Text style={styles.dayDate}>{item.date} {item.week}</Text>
+            <Text allowFontScaling={false} style={{fontSize:16,color:item.isPast?'#999999':'#666666'}}>{item.title}{item.dateStatus}</Text>
+            <Text allowFontScaling={false} style={styles.dayDate}>{item.repeatDate} {item.week}</Text>
           </View>
           <View style={styles.dayItemRight}>
-            <Text style={{textAlign: "right",
+            <Text allowFontScaling={false} style={{textAlign: "right",
             fontSize: 20,
             fontWeight: 'bold',
             color:item.isPast?'#999999':'#666666'}}>{item.dayNum}</Text>
-            <Text style={styles.dayLogo}>{item.unit}</Text>
+            <Text allowFontScaling={false} style={styles.dayLogo}>{item.unit}</Text>
           </View>
           
         </View>
@@ -259,7 +264,7 @@ class DaysScreen extends React.Component {
               underlayColor='#B9B8B6'>
               <View style={styles.addEventBox}>
                 <Ionicons name='md-add' size={30} color="#B9B8B6" />
-                <Text style={{ color: '#B9B8B6', fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
+                <Text allowFontScaling={false} style={{ color: '#B9B8B6', fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
               </View>
             </TouchableHighlight>
           </View>
@@ -268,12 +273,12 @@ class DaysScreen extends React.Component {
         return (
           <ScrollView>
             <View style={styles.TopDayCOntainer}>
-              <Text style={styles.topDayDataTitle}>{topDayData.title}{topDayData.dateStatus}</Text>
+              <Text allowFontScaling={false} style={styles.topDayDataTitle}>{topDayData.title}{topDayData.dateStatus}</Text>
               <View style={styles.inlineBlock}>
-                <Text style={styles.topDayDataDayNum}>{topDayData.dayNum}</Text>
-                <Text>{topDayData.unit}</Text>
+                <Text allowFontScaling={false} style={styles.topDayDataDayNum}>{topDayData.dayNum}</Text>
+                <Text allowFontScaling={false}>{topDayData.unit}</Text>
               </View>
-              <Text style={styles.topDayDataDate}>{topDayData.date} {topDayData.week}</Text>
+              <Text allowFontScaling={false} style={styles.topDayDataDate}>{topDayData.repeatDate} {topDayData.week}</Text>
             </View>
             <View style={styles.dayItemContainer}>
               <FlatList

@@ -51,12 +51,7 @@ export default class Repeat extends React.Component {
         })
         //alert(leftArr[0].text)
     }
-    repeatTypeChange(label) {
-
-    }
-    repeatCycleChange() {
-
-    }
+    
     //选择重复类型
     typeListRender({ item }) {
         return (
@@ -74,7 +69,7 @@ export default class Repeat extends React.Component {
                     //,{backgroundColor:this.state.repeatType==item.label?"rgba(0,0,0,0.2)":'#ffffff'}
                 }} >
                 
-                <Text style={[styles.label]}>{item.label}</Text>
+                <Text allowFontScaling={false} style={[styles.label]}>{item.label}</Text>
             </TouchableHighlight>
         )
 
@@ -89,7 +84,7 @@ export default class Repeat extends React.Component {
                     })
                     this.props.render(item.label,item.label == '不重复' ? '不重复' : this.state.repeatType);
                 }}>
-                <Text style={[styles.label]}>{item.label}</Text>
+                <Text allowFontScaling={false} style={[styles.label]}>{item.label}</Text>
             </TouchableHighlight>
         )
 
@@ -110,16 +105,16 @@ export default class Repeat extends React.Component {
                     <View style={styles.selectRepeat}>
                         <View style={styles.repeatTop}>
                             <TouchableOpacity style={[styles.repeatTopItem]} onPress={this._onPressButton}>
-                                <Text style={{ color: repeatType != '不重复' ? '#53CDFF' : '#777777', fontSize: 18, textAlign: "center" }}>{repeatType}</Text>
+                                <Text allowFontScaling={false} style={{ color: repeatType != '不重复' ? '#53CDFF' : '#777777', fontSize: 18, textAlign: "center" }}>{repeatType}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.repeatTopItem]} onPress={this._onPressButton}>
-                                <Text style={{ color: repeatCycle != '不重复' ? '#53CDFF' : '#777777', fontSize: 18, textAlign: "center" }}>{repeatCycle}</Text>
+                                <Text allowFontScaling={false} style={{ color: repeatCycle != '不重复' ? '#53CDFF' : '#777777', fontSize: 18, textAlign: "center" }}>{repeatCycle}</Text>
                             </TouchableOpacity>
                             <TouchableHighlight underlayColor='#ffffff' style={[styles.confirmBtn]} onPress={()=>{
                                 let value=repeatType=='不重复'?'不重复':repeatCycle+repeatType;
                                 this.props.isOpen(value);
                             }}>
-                                <Text style={{
+                                <Text allowFontScaling={false} style={{
                                     borderColor: '#53CDFF',
                                     borderWidth: 1,
                                     width: 50, lineHeight: 30, borderRadius: 10, textAlign: "center"
