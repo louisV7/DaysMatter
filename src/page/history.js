@@ -5,7 +5,7 @@ import { Card } from 'react-native-shadow-cards';
 import Feather from 'react-native-vector-icons/Feather';//cloud-rain
 import Ionicons from 'react-native-vector-icons/Ionicons';//多云：ios-partly-sunny，晴天：md-sunny
 
-import { history, calendar, laohuangli, weather, baiduMap } from '../api.js';
+import { history, calendar, laohuangli, weather, baiduMap,baiduMapAddress } from '../api.js';
 import { getLunarDate, getLunarDateString, getTodayDate, getDay } from '../util.js';
 const historyKey = 'b469258df91094c4b3b82edabcad82c0';
 const weatherKey = 'ede618bbdfe67ab7f4d22558c12f0ad7';
@@ -25,7 +25,7 @@ class HistoryScreen extends React.Component {
             todayDate: year + '年' + month + '月' + day,
             todayLunarDate: getLunarDateString(getLunarDate(year + '-' + month + '-' + day)),
             todayWeek: getDay(year + '-' + month + '-' + day),
-            loaded: false,
+            loaded: true,
             suitable: '',
             avoid: '',
             weatherData: {}
@@ -34,6 +34,7 @@ class HistoryScreen extends React.Component {
     componentDidMount() {
         const that = this;
         const date = month + '/' + day;
+        
         //天气
         that.getWeather();
         //历史上的今天
@@ -66,18 +67,20 @@ class HistoryScreen extends React.Component {
             }
         })*/
     }
+   
     //获取天气
     getWeather() {
         let city = '';
         const that = this;
         that.getCityLocation()
             .then(res => {
-                //alert(res.result.addressComponent.city)
-                city = res.result.addressComponent.city;
-                //console.log('获取当前位置', res.result.addressComponent.city);
+                //alert(res.address)
+                city = res.address;
+                //console.log('获取当前位置', res.address);
                 //console.log('获取天气的api', weather(city.substr(0,city.length-1), weatherKey));
                 that.fetch(weather(city.substr(0, city.length - 1), weatherKey)).then((res) => {
-                    //console.log(res.result)
+                    console.log('天气预报')
+                    console.log(res.result)
                     if (res.error_code == 0) {
                         that.setState({
                             weatherData: res.result,
@@ -93,47 +96,23 @@ class HistoryScreen extends React.Component {
                 //logWarn('获取失败' + err);
             });
     }
-    //获取经纬度
-    getLongitudeAndLatitude() {
-        return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(
-                (location) => {
-                    resolve([location.coords.longitude, location.coords.latitude]);
-                },
-                (error) => {
-                    reject(error);
-                }
-            );
-        });
-    };
+    
     //获取城市定位信息
     getCityLocation() {
         const that = this;
         return new Promise((resolve, reject) => {
-            that.getLongitudeAndLatitude()
-                //获取经纬度的方法返回的是经纬度组成的数组
-                .then(locationArr => {
-                    let longitude = locationArr[0];
-                    let latitude = locationArr[1];
-                    //alert('longitude=='+longitude+',latitude=='+latitude)
-                    //alert(baiduMap(baiduAK,latitude,longitude))
-                    that.fetch(baiduMap(baiduAK, latitude, longitude)).then((res) => {
-                        //console.log(res)
-                        //alert(res.status)//240
-                        if (res.status == 0) {
-                            resolve(res)
-                        } else {
-                            reject(res.code);
-                        }
-                    })
-                        .catch(error => {
-                            reject(error.code);
-                        });
-
-                })
-                .catch(data => {
-                    reject(data.code);
-                });
+            alert(baiduMapAddress(baiduAK,'bd09ll'))
+            that.fetch(baiduMapAddress(baiduAK,'bd09ll')).then((res) =>{
+                //console.log(res)
+                if (res.status == 0) {
+                    resolve(res.content)
+                } else {
+                    reject(res.status);
+                }
+            })
+            .catch((error)=>{
+                reject(error.status);
+            })
         });
     };
     fetch(url) {
@@ -165,7 +144,9 @@ class HistoryScreen extends React.Component {
     //天气渲染
     weatherRender() {
         const { weatherData } = this.state;
-        //console.log(weatherData)
+        //alert(JSON.stringify(weatherData) != '{}')
+        console.log('渲染前天气信息')
+        console.log(weatherData)
         if (JSON.stringify(weatherData) != '{}') {
             let iconName=weatherData.realtime.info.indexOf('多云')||weatherData.realtime.info.indexOf('阴')?"ios-partly-sunny":weatherData.realtime.info.indexOf('晴')
             ?"md-sunny":weatherData.realtime.info.indexOf('雨')?'cloud-rain':''

@@ -13,3 +13,7 @@ export function weather(city,key){
 export function baiduMap(baiduAK,latitude,longitude){
     return `http://api.map.baidu.com/reverse_geocoding/v3/?ak=${baiduAK}&output=json&location=${latitude},${longitude}`;
 }
+
+export function baiduMapAddress(baiduAK,coor){
+    return `https://api.map.baidu.com/location/ip?ip=&ak=${baiduAK}&coor = ${coor}`;
+}

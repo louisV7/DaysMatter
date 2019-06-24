@@ -118,7 +118,7 @@ class DaysScreen extends React.Component {
     let data = [];
     _readFile(fileName, function (res) {
       data = JSON.parse(res);
-      console.log(data)
+      //console.log(data)
       data.forEach((item, index) => {
         let newDate='';
         let isPast=getDiffDate(item.date).text == '已过去' ? true : false;

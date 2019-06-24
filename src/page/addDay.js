@@ -318,7 +318,8 @@ class AddDaysScreen extends React.Component {
             },
             onPickerCancel: data => {
                 that.setState({
-                    repeatText:'不重复'
+                    repeatText:'不重复',
+                    repeatModalVisible:false
                 })
             },
             onPickerSelect: data => {
