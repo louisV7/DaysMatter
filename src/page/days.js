@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, ScrollView, FlatList, TouchableHighlight,ActivityIndicator,Image } from "react-native";
+import { View, StyleSheet, Text, ScrollView, FlatList, TouchableHighlight, ActivityIndicator, Image, StatusBar, Button } from "react-native";
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';//https://oblador.github.io/react-native-vector-icons/图标地址
+import AsyncStorage from '@react-native-community/async-storage';
 
-
-import { history, calendar } from '../api.js';
-import { increase_success, increase_fail, delete_success, delete_fail } from '../redux/actions/GetDayAction.js';
-import { getDiffDate, getDay, repeatDate,insert_sort } from '../util.js';
+import { calendar } from '../api.js';
+import { getDiffDate, getDay, repeatDate, insert_sort } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
+import { PaddingTop } from '../deviceInfo.js';
 const year = 2019;
 const key = '50c6f7517446dbb4d803a1c7f962ebaf';
 const fileName = 'days.txt';
-const pastTrueFileName='pastTrue.txt';
-const pastFalseFileName='pastFalse.txt';
 class DaysScreen extends React.Component {
   //标题
   static navigationOptions = ({ navigation }) => ({
@@ -24,7 +22,7 @@ class DaysScreen extends React.Component {
         underlayColor='rgba(0,0,0,0.2)'
         style={{ marginRight: 20, width: 35, height: 35, borderRadius: 50, justifyContent: "center", alignItems: "center", }}
       >
-        <Ionicons name='md-add' size={35} color="#ffffff" />
+        <Ionicons name='md-add' size={35} color="#666666" />
       </TouchableHighlight>
     ),
   });
@@ -34,6 +32,7 @@ class DaysScreen extends React.Component {
       daysData: [],
       topDayData: {},
       loaded: false,//是否加载完成
+      themeInfo: {}
     }
   }
   /*
@@ -42,9 +41,12 @@ class DaysScreen extends React.Component {
     })
    
    */
+  componentWillMount(){
+    const that = this;
+    that.getThemeBgImg();
+  }
   componentDidMount() {
     const that = this;
-   
     _fileEx(fileName, function (res) {
       if (res) {
         that.updateData();
@@ -52,7 +54,7 @@ class DaysScreen extends React.Component {
         that.initData();
       }
     })
-    
+
 
   }
   componentWillReceiveProps(nextProps) {
@@ -70,6 +72,26 @@ class DaysScreen extends React.Component {
       } else {
 
       }
+    }
+  }
+  //获取背景图
+  getThemeBgImg() {
+    const that=this;
+    try {
+      AsyncStorage.getItem(
+        'themeInfo',
+        (error, result) => {
+          if (error) {
+            //alert('取值失败:' + error);
+          } else {
+            that.setState({
+              themeInfo:JSON.parse(result)
+            })
+          }
+        }
+      )
+    } catch (error) {
+      //alert('失败' + error);
     }
   }
   // 第一次进入app初始化数据
@@ -92,13 +114,13 @@ class DaysScreen extends React.Component {
               unit: '天',
               title: item.name == '元旦' ? "New year " : item.name,
               date: item.startday,
-              repeatDate:item.startday,
+              repeatDate: item.startday,
               dateStatus: getDiffDate(item.startday).text,
               dayNum: getDiffDate(item.startday).dayNum,
               week: getDay(item.startday),
               isTop: count == 0 ? true : false,
               isPast: getDiffDate(item.startday).text == '已过去' ? true : false,
-              repeatText:'不重复'
+              repeatText: '不重复'
             }
             daysArr.push(dayItem);
             count++;
@@ -120,25 +142,25 @@ class DaysScreen extends React.Component {
       data = JSON.parse(res);
       //console.log(data)
       data.forEach((item, index) => {
-        let newDate='';
-        let isPast=getDiffDate(item.date).text == '已过去' ? true : false;
-        if(isPast){
-          newDate=repeatDate(item.date,item.repeatText);
-        }else{
-          newDate=item.date;
+        let newDate = '';
+        let isPast = getDiffDate(item.date).text == '已过去' ? true : false;
+        if (isPast) {
+          newDate = repeatDate(item.date, item.repeatText);
+        } else {
+          newDate = item.date;
         }
         dayItem = {
           id: item.id + '',
           unit: item.unit,
           title: item.title,
           date: item.date,
-          repeatDate:newDate,
+          repeatDate: newDate,
           dateStatus: getDiffDate(newDate).text,
           dayNum: getDiffDate(newDate).dayNum,
           week: getDay(newDate),
           isTop: item.isTop,
           isPast: getDiffDate(newDate).text == '已过去' ? true : false,
-          repeatText:item.repeatText
+          repeatText: item.repeatText
         }
         dataArr.push(dayItem);
       })
@@ -151,27 +173,27 @@ class DaysScreen extends React.Component {
       })
     })
   }
-  
+
   //设置state数据
   setDaydata(daysArr) {
     const that = this;
-    let pastTrue=[];
-    let pastFalse=[];
-    let result =[];
+    let pastTrue = [];
+    let pastFalse = [];
+    let result = [];
     let loaded = false;
     //如果是还没过去的日期按照从小到大排序，是已经过去的日期按照从大到小排序
     _writeFile(fileName, JSON.stringify(daysArr), function (res) {
       if (res == 1) {
         _readFile(fileName, function (res) {
-          data=JSON.parse(res);
-          for(var i=0;i<data.length;i++){
-            if(data[i].isPast){
+          data = JSON.parse(res);
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].isPast) {
               pastTrue.push(data[i]);
-            }else{
+            } else {
               pastFalse.push(data[i]);
             }
           }
-          result=insert_sort(pastFalse,false).concat(insert_sort(pastTrue,true));
+          result = insert_sort(pastFalse, false).concat(insert_sort(pastTrue, true));
           that.setState({
             daysData: result,
             topDayData: result[that.top(result)],
@@ -183,13 +205,13 @@ class DaysScreen extends React.Component {
   }
   //置顶操作
   top(arr) {
-    let index=0;
-    for(var i=0;i<arr.length;i++){
-      if(arr[i].isTop){
-        index=i;
+    let index = 0;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].isTop) {
+        index = i;
         break;
-      }else{
-        index=0;
+      } else {
+        index = 0;
       }
     }
     return index;
@@ -212,45 +234,49 @@ class DaysScreen extends React.Component {
   //列表渲染
   dayItemRender({ item }) {
     const { navigation } = this.props;
+    const {themeInfo}=this.state;
     return (
       <TouchableHighlight
         onPress={() => {
           navigation.push('PastDayDetail', {
-              id: item.id,
-              isPast:item.isPast
-            })
+            id: item.id,
+            isPast: item.isPast
+          })
         }}
         underlayColor='rgba(0,0,0,0.2)'
-        style={{ height:55, paddingLeft: 20, paddingRight: 20 }}
+        style={{ height: 55, paddingLeft: 20, paddingRight: 20 }}
       >
         <View style={[styles.dayItem, styles.inlineBlock]}>
           <View style={styles.dayItemLeft}>
-            <Text allowFontScaling={false} style={{fontSize:16,color:item.isPast?'#999999':'#666666'}}>{item.title}{item.dateStatus}</Text>
-            <Text allowFontScaling={false} style={styles.dayDate}>{item.repeatDate} {item.week}</Text>
+            <Text allowFontScaling={false} style={{ fontSize: 16}}>{item.title}{item.dateStatus}</Text>
+            <Text allowFontScaling={false} style={[styles.dayDate]}>{item.repeatDate} {item.week}</Text>
           </View>
           <View style={styles.dayItemRight}>
-            <Text allowFontScaling={false} style={{textAlign: "right",
-            fontSize: 20,
-            fontWeight: 'bold',
-            color:item.isPast?'#999999':'#666666'}}>{item.dayNum}</Text>
-            <Text allowFontScaling={false} style={styles.dayLogo}>{item.unit}</Text>
+            <Text allowFontScaling={false} style={{
+              textAlign: "right",
+              fontSize: 20,
+              fontWeight: 'bold',
+              //color: themeInfo.textColor
+              //color: item.isPast ? '#999999' : '#666666'
+            }}>{item.dayNum}</Text>
+            <Text allowFontScaling={false} style={[styles.dayLogo]}>{item.unit}</Text>
           </View>
-          
+
         </View>
       </TouchableHighlight>
     )
   }
-/*
-{
-            item.isPast
-            ?<View style={styles.past}>
-              <Text style={{color:'#999999'}}>已过去</Text>
-            </View>
-            :null
-          }*/
-  
+  /*
+  {
+              item.isPast
+              ?<View style={styles.past}>
+                <Text style={{color:'#999999'}}>已过去</Text>
+              </View>
+              :null
+            }*/
+
   show() {
-    const { daysData, topDayData, loaded } = this.state;
+    const { daysData, topDayData, loaded,themeInfo } = this.state;
     const isNUll = daysData.length != 0 ? false : true
     const { navigation } = this.props;
     if (loaded) {
@@ -273,12 +299,12 @@ class DaysScreen extends React.Component {
         return (
           <ScrollView>
             <View style={styles.TopDayCOntainer}>
-              <Text allowFontScaling={false} style={styles.topDayDataTitle}>{topDayData.title}{topDayData.dateStatus}</Text>
+              <Text allowFontScaling={false} style={[styles.topDayDataTitle]}>{topDayData.title}{topDayData.dateStatus}</Text>
               <View style={styles.inlineBlock}>
-                <Text allowFontScaling={false} style={styles.topDayDataDayNum}>{topDayData.dayNum}</Text>
-                <Text allowFontScaling={false}>{topDayData.unit}</Text>
+                <Text allowFontScaling={false} style={[styles.topDayDataDayNum]}>{topDayData.dayNum}</Text>
+                <Text allowFontScaling={false} >{topDayData.unit}</Text>
               </View>
-              <Text allowFontScaling={false} style={styles.topDayDataDate}>{topDayData.repeatDate} {topDayData.week}</Text>
+              <Text allowFontScaling={false} style={[styles.topDayDataDate]}>{topDayData.repeatDate} {topDayData.week}</Text>
             </View>
             <View style={styles.dayItemContainer}>
               <FlatList
@@ -291,7 +317,7 @@ class DaysScreen extends React.Component {
           </ScrollView>
         )
       }
-    }{
+    } {
       return (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#53CDFF" />
@@ -299,14 +325,20 @@ class DaysScreen extends React.Component {
       );
     }
   }
-  //<Image source={require('../images/loading.gif')}></Image>
   //<Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
 
   render() {
-    return this.show() 
+    return <View style={[styles.container, { paddingTop: PaddingTop }]} >
+      {
+        JSON.stringify(this.state.themeInfo)!='{}'?<Image resizeMode='cover' source={{uri: this.state.themeInfo.img}} style={styles.backgroundImage} />:null
+      }
+      {
+        this.show()
+      }
+    </View>;
   }
 }
-
+//<Image resizeMode='cover' source={this.state.bg} style={styles.backgroundImage} />
 var styles = StyleSheet.create({
   block: {
     flexDirection: "column",
@@ -316,7 +348,18 @@ var styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    position:"relative",
+    position: "relative",
+    backgroundColor:"transparent"
+  },
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    height: null,
+    width: null,
+    zIndex: -1
   },
   TopDayCOntainer: {
     padding: 20,
@@ -324,22 +367,24 @@ var styles = StyleSheet.create({
   },
   topDayDataTitle: {
     fontSize: 26,
+    //fontFamily: '刻石录颜体',
   },
   topDayDataDayNum: {
     fontSize: 62,
     fontWeight: 'bold',
+    //fontFamily: '台湾教育部标准楷书',
   },
   topDayDataDate: {
-
+    //fontFamily: '王汉宗中隶书繁',
   },
   dayItemContainer: {
 
   },
   dayItem: {
-    height:55,
+    height: 55,
     justifyContent: "center",
     alignItems: "center",
-    position:"relative",
+    position: "relative",
   },
   dayItemLeft: {
     flex: 3.8,
@@ -348,33 +393,31 @@ var styles = StyleSheet.create({
     //fontSize: 16
   },
   dayDate: {
-    color: '#999999',
     fontSize: 14
   },
   dayItemRight: {
     flex: 1.2,
   },
   dayDayNum: {
-    
+
   },
   dayLogo: {
     textAlign: "right",
-    color: '#999999',
     fontSize: 14
   },
-  past:{
-    position:"absolute",
-    right:20,
-    borderColor:'#999999',
-    borderWidth:1,
-    width:50,
-    height:25,
+  /*past: {
+    position: "absolute",
+    right: 20,
+    borderColor: '#ffffff',
+    borderWidth: 1,
+    width: 50,
+    height: 25,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    transform:[{rotate:'-20deg'}],
-    borderRadius:12
-  },
+    transform: [{ rotate: '-20deg' }],
+    borderRadius: 12
+  },*/
   //以下是没有数据时的样式
   NoEvent: {
     height: '100%',
@@ -396,13 +439,13 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10
   },
-  loading:{
+  loading: {
     flex: 1,
     //flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff",
-    
+
   }
 })
 

@@ -5,19 +5,27 @@ import {Card} from 'react-native-shadow-cards';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+//引入主题配置文件
+import { theme } from '../theme.js';
 import { history, calendar } from '../api.js';
 import { increase_success, increase_fail, delete_success, delete_fail } from '../redux/actions/GetDayAction.js';
 import { getLunarDate, getLunarDateString } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
 import ConfirmModal from '../components/confirmModal.js';
+import {STATUS_BAR_HEIGHT} from '../deviceInfo.js';
+
+const height=STATUS_BAR_HEIGHT + 44;
+const paddingTop=STATUS_BAR_HEIGHT;
 const fileName = 'days.txt';
 class PastDayDetail extends React.Component {
     //标题
     static navigationOptions = ({ navigation }) => ({
         headerStyle: {
-            backgroundColor:navigation.getParam('isPast',false)?'#4B4A50':'#53CDFF',
+            backgroundColor:navigation.getParam('isPast',false)?theme.pastTheme:theme.themeColor,
+            height: height,
+            paddingTop: paddingTop
           },
+          headerTintColor:'#fff',
         headerRight: (
             <TouchableHighlight
                 onPress={() => navigation.push('AddDay', {
@@ -127,18 +135,20 @@ class PastDayDetail extends React.Component {
             })*/
         }
     }
-    render() {
-        const {navigation}=this.props;
-        const {detailInfo,modalVisible}=this.state;
-        return (
-            <View style={styles.container}>
-                {
+    /*
+    {
                     detailInfo.isPast?
                     <StatusBar
                         backgroundColor="#4B4A50"
                         barStyle="light-content"
                     />:null
                 }
+    */
+    render() {
+        const {navigation}=this.props;
+        const {detailInfo,modalVisible}=this.state;
+        return (
+            <View style={styles.container}>
                 <Card style={styles.daysContainer}>
                     <LinearGradient colors={detailInfo.isPast?['#767B7E', '#4B4A50', '#323137']:['#90E2F8','#53CDFF','#35A1D0']} style={styles.title}>
                         <Text allowFontScaling={false} style={{color:'#ffffff',fontSize:18}}>{detailInfo.title}{detailInfo.dateStatus}</Text>
@@ -211,7 +221,7 @@ var styles = StyleSheet.create({
     daysContainer:{
         width:200,
         height:200,
-        marginTop: 120,
+        marginTop: 200,
     },
     title:{
         flexDirection: "row",

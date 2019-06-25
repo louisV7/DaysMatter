@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, FlatList, ScrollView, ActivityIndicator, TouchableHighlight } from "react-native";
+import { View, StyleSheet, Text, FlatList, ScrollView, ActivityIndicator, TouchableHighlight,Image,StatusBar} from "react-native";
 import { connect } from 'react-redux';
 import { Card } from 'react-native-shadow-cards';
 import Feather from 'react-native-vector-icons/Feather';//cloud-rain
 import Ionicons from 'react-native-vector-icons/Ionicons';//多云：ios-partly-sunny，晴天：md-sunny
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { history, calendar, laohuangli, weather, baiduMap,baiduMapAddress } from '../api.js';
 import { getLunarDate, getLunarDateString, getTodayDate, getDay } from '../util.js';
+import {PaddingTop} from '../deviceInfo.js';
 const historyKey = 'b469258df91094c4b3b82edabcad82c0';
 const weatherKey = 'ede618bbdfe67ab7f4d22558c12f0ad7';
 const ChinaCalendarKey = 'c18aec5d6c41cb971544cb2c7c919b9f';
@@ -28,9 +30,14 @@ class HistoryScreen extends React.Component {
             loaded: true,
             suitable: '',
             avoid: '',
-            weatherData: {}
+            weatherData: {},
+            themeInfo: {}
         }
     }
+    componentWillMount(){
+        const that = this;
+        that.getThemeBgImg();
+      }
     componentDidMount() {
         const that = this;
         const date = month + '/' + day;
@@ -52,7 +59,29 @@ class HistoryScreen extends React.Component {
             }
         })
 
-        //老黄历
+        
+    }
+     //获取背景图
+  getThemeBgImg() {
+    const that=this;
+    try {
+      AsyncStorage.getItem(
+        'themeInfo',
+        (error, result) => {
+          if (error) {
+            //alert('取值失败:' + error);
+          } else {
+            that.setState({
+                themeInfo:JSON.parse(result)
+            })
+          }
+        }
+      )
+    } catch (error) {
+      //alert('失败' + error);
+    }
+  }
+   //老黄历
         /*that.fetch(ChinaCalendar(year + '-' + month + '-' + day, ChinaCalendarKey)).then((res) => {
             if (res.error_code == 0) {
                 that.setState({
@@ -66,8 +95,6 @@ class HistoryScreen extends React.Component {
                 })
             }
         })*/
-    }
-   
     //获取天气
     getWeather() {
         let city = '';
@@ -101,7 +128,7 @@ class HistoryScreen extends React.Component {
     getCityLocation() {
         const that = this;
         return new Promise((resolve, reject) => {
-            alert(baiduMapAddress(baiduAK,'bd09ll'))
+            //alert(baiduMapAddress(baiduAK,'bd09ll'))
             that.fetch(baiduMapAddress(baiduAK,'bd09ll')).then((res) =>{
                 //console.log(res)
                 if (res.status == 0) {
@@ -131,13 +158,14 @@ class HistoryScreen extends React.Component {
     }
     //历史列表
     historyItem({ item }) {
+        const {themeInfo}=this.state;
         return (
             <View style={[styles.historyItem, styles.inlineBlock]}>
                 <View style={styles.historyItemLeft}>
-                    <Text style={{ fontSize: 18 }}>{item.date.split('年')[0]}</Text>
+                    <Text style={{ fontSize: 18}}>{item.date.split('年')[0]}</Text>
                 </View>
-                <Text style={styles.historyItemCenter}>{item.date},{item.title}。</Text>
-                <Text style={styles.historyItemRight}></Text>
+                <Text style={[styles.historyItemCenter]}>{item.date},{item.title}。</Text>
+                <Text style={[styles.historyItemRight]}></Text>
             </View>
         )
     }
@@ -187,7 +215,7 @@ class HistoryScreen extends React.Component {
 
     }
     render() {
-        const { historyData, todayDate, todayLunarDate, loaded, suitable, avoid, weatherData } = this.state;
+        const { historyData, todayDate, todayLunarDate, loaded, suitable, avoid, weatherData,todayWeek } = this.state;
         const { navigation } = this.props;
         if (!loaded) {
             return (
@@ -197,14 +225,17 @@ class HistoryScreen extends React.Component {
             )
         } else {
             return (
-                <View style={styles.container}>
+                <View style={[styles.container,{paddingTop:PaddingTop}]}>
+                    {
+                        JSON.stringify(this.state.themeInfo)!='{}'?<Image resizeMode='cover' source={{uri: this.state.themeInfo.img}} style={styles.backgroundImage} />:null
+                    }
                     <Card cornerRadius={0} opacity={0.3} elevation={5} style={styles.todayContainer}>
                         <View style={styles.todayDate} >
                             <View style={styles.topLeft}>
                                 <Text allowFontScaling={false} style={styles.date}>{todayDate}</Text>
                                 <Text allowFontScaling={false} style={styles.LunarDate}>{todayLunarDate}</Text>
                             </View>
-                            <Text allowFontScaling={false} style={styles.topRight}>星期五</Text>
+                            <Text allowFontScaling={false} style={styles.topRight}>{todayWeek}</Text>
                         </View>
                         {this.weatherRender()}
                     </Card>
@@ -264,8 +295,19 @@ var styles = StyleSheet.create({
         flexDirection: "row",
     },
     container: {
-        flex: 1
+        flex: 1,
+        position:"relative"
     },
+    backgroundImage: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        height: null,
+        width: null,
+        zIndex: -1
+      },
     todayContainer: {
         paddingTop: 10,
         paddingBottom: 10,
@@ -273,7 +315,8 @@ var styles = StyleSheet.create({
         paddingRight: 20,
         //height:120,
         width: '100%',
-        marginBottom: 15
+        marginBottom: 15,
+        backgroundColor:"transparent"
     },
     todayDate: {
         width: '100%',
@@ -287,7 +330,6 @@ var styles = StyleSheet.create({
     },
     LunarDate: {
         fontSize: 14,
-        color: '#999999'
     },
     topRight: {
         flex: 2,
@@ -311,7 +353,8 @@ var styles = StyleSheet.create({
     historyContainer: {
         flex: 1,
         paddingLeft: 20,
-        paddingRight: 20
+        paddingRight: 20,
+        backgroundColor:"transparent"
         //marginBottom:40
     },
     historyItem: {

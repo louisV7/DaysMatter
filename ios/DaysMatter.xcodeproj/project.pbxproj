@@ -63,6 +63,13 @@
 		22292D995C064FB8949FA729 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ED4924B635644A581185BD8 /* libSplashScreen.a */; };
 		9DA1D4CA6AAC4A338C27B07C /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4EA70830D4F49599FACCCC7 /* libRNCAsyncStorage.a */; };
 		5E175EBE959949EBBB824771 /* libRCTBEEPickerManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C630ADE4FA14CBD824B6159 /* libRCTBEEPickerManager.a */; };
+		A3FA9E67335B49B494BDD00C /* 刻石录颜体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33A922F84C1B4968AB3AE5BB /* 刻石录颜体.ttf */; };
+		7B56C2149DE44B66A281124F /* 台湾全字库正楷体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C394A4CBB88A4CD080B339F7 /* 台湾全字库正楷体.ttf */; };
+		79518A6D8BD1471F946DC931 /* 台湾教育部标准楷书.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7C4629996F64BC48E3F3419 /* 台湾教育部标准楷书.ttf */; };
+		537A2E8A7BC94CBD96297269 /* 王汉宗中隶书繁.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0E0B49EE2DA45328EA01908 /* 王汉宗中隶书繁.ttf */; };
+		BF1E9915AC454B999CB64EB4 /* 王汉宗粗楷体简.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 367BFB4604244D1598427305 /* 王汉宗粗楷体简.ttf */; };
+		51E462F30BBA461AB3ACF1B1 /* 思源宋体 SC-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B3F46CF6DFC74BFE85B16944 /* 思源宋体 SC-Bold.otf */; };
+		FEC328AAF85F4DA6BBA6BA1D /* 花园明朝体HanaMinB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A741EEA0E1843EE80DB7C6A /* 花园明朝体HanaMinB.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -401,6 +408,13 @@
 		C4EA70830D4F49599FACCCC7 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		40B7134D37B34D1BB6E6030E /* RCTBEEPickerManager.xcodeproj */ = {isa = PBXFileReference; name = "RCTBEEPickerManager.xcodeproj"; path = "../node_modules/react-native-picker/ios/RCTBEEPickerManager.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		5C630ADE4FA14CBD824B6159 /* libRCTBEEPickerManager.a */ = {isa = PBXFileReference; name = "libRCTBEEPickerManager.a"; path = "libRCTBEEPickerManager.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		33A922F84C1B4968AB3AE5BB /* 刻石录颜体.ttf */ = {isa = PBXFileReference; name = "刻石录颜体.ttf"; path = "../assets/fonts/刻石录颜体.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C394A4CBB88A4CD080B339F7 /* 台湾全字库正楷体.ttf */ = {isa = PBXFileReference; name = "台湾全字库正楷体.ttf"; path = "../assets/fonts/台湾全字库正楷体.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B7C4629996F64BC48E3F3419 /* 台湾教育部标准楷书.ttf */ = {isa = PBXFileReference; name = "台湾教育部标准楷书.ttf"; path = "../assets/fonts/台湾教育部标准楷书.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E0E0B49EE2DA45328EA01908 /* 王汉宗中隶书繁.ttf */ = {isa = PBXFileReference; name = "王汉宗中隶书繁.ttf"; path = "../assets/fonts/王汉宗中隶书繁.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		367BFB4604244D1598427305 /* 王汉宗粗楷体简.ttf */ = {isa = PBXFileReference; name = "王汉宗粗楷体简.ttf"; path = "../assets/fonts/王汉宗粗楷体简.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B3F46CF6DFC74BFE85B16944 /* 思源宋体 SC-Bold.otf */ = {isa = PBXFileReference; name = "思源宋体 SC-Bold.otf"; path = "../assets/fonts/思源宋体 SC-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9A741EEA0E1843EE80DB7C6A /* 花园明朝体HanaMinB.ttf */ = {isa = PBXFileReference; name = "花园明朝体HanaMinB.ttf"; path = "../assets/fonts/花园明朝体HanaMinB.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -702,6 +716,13 @@
 				261ED08D03DE4CDDB81690B2 /* Octicons.ttf */,
 				F2BB74347DD943EBB41B6EBF /* SimpleLineIcons.ttf */,
 				584A8D7E6CCA4325900475A7 /* Zocial.ttf */,
+				33A922F84C1B4968AB3AE5BB /* 刻石录颜体.ttf */,
+				C394A4CBB88A4CD080B339F7 /* 台湾全字库正楷体.ttf */,
+				B7C4629996F64BC48E3F3419 /* 台湾教育部标准楷书.ttf */,
+				E0E0B49EE2DA45328EA01908 /* 王汉宗中隶书繁.ttf */,
+				367BFB4604244D1598427305 /* 王汉宗粗楷体简.ttf */,
+				B3F46CF6DFC74BFE85B16944 /* 思源宋体 SC-Bold.otf */,
+				9A741EEA0E1843EE80DB7C6A /* 花园明朝体HanaMinB.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1168,6 +1189,13 @@
 				FC171E2B7BA141C99F4A89A5 /* Octicons.ttf in Resources */,
 				B189118A73E4481E85A3BDFB /* SimpleLineIcons.ttf in Resources */,
 				BB377F4728084EF1A32158A7 /* Zocial.ttf in Resources */,
+				A3FA9E67335B49B494BDD00C /* 刻石录颜体.ttf in Resources */,
+				7B56C2149DE44B66A281124F /* 台湾全字库正楷体.ttf in Resources */,
+				79518A6D8BD1471F946DC931 /* 台湾教育部标准楷书.ttf in Resources */,
+				537A2E8A7BC94CBD96297269 /* 王汉宗中隶书繁.ttf in Resources */,
+				BF1E9915AC454B999CB64EB4 /* 王汉宗粗楷体简.ttf in Resources */,
+				51E462F30BBA461AB3ACF1B1 /* 思源宋体 SC-Bold.otf in Resources */,
+				FEC328AAF85F4DA6BBA6BA1D /* 花园明朝体HanaMinB.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

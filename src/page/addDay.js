@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, Switch, TextInput, ToastAndroid, BackHandler } from "react-native";
+import { View, StyleSheet, TouchableHighlight, Text, Switch, TextInput, ToastAndroid, BackHandler,StatusBar } from "react-native";
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,6 +16,13 @@ import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.
 import DatePicker from '../components/datePicker.js';
 import ConfirmModal from '../components/confirmModal.js';
 import Repeat from '../components/repeat.js';
+import { PaddingTop } from '../deviceInfo.js';
+//引入主题配置文件
+import { theme } from '../theme.js';
+import {STATUS_BAR_HEIGHT} from '../deviceInfo.js';
+
+const height=STATUS_BAR_HEIGHT + 44;
+const paddingTop=STATUS_BAR_HEIGHT;
 const fileName = 'days.txt';
 const year = getTodayDate().year;
 const month = getTodayDate().month;
@@ -37,6 +44,13 @@ const Toast = (props) => {
 class AddDaysScreen extends React.Component {
     //标题
     static navigationOptions = ({ navigation }) => ({
+        //headerTransparent:false,
+        /*headerStyle: {
+            backgroundColor: theme.themeColor,
+            height: height,
+            paddingTop: paddingTop
+        },*/
+        //headerTintColor:'#fff',
         title: navigation.getParam('id') == "-1" ? "添加新日子" : "编辑事件",
         headerBackImage:(
             <TouchableHighlight
@@ -89,14 +103,19 @@ class AddDaysScreen extends React.Component {
         that.props.navigation.setParams({ navigatePress: that.back });
        
     }
-    
+    componentWillUnmount() {
+        this.timer && clearTimeout(this.timer);
+      }
     back(){
         const {navigation}=this.props;
         this.setState({
             repeatModalVisible:false
         })
         Picker.hide();
-        navigation.goBack();
+        this.timer = setTimeout(() => {
+            navigation.goBack();
+        }, 500);
+        
     }
     //编辑时的信息
     showDetail() {
@@ -330,6 +349,12 @@ class AddDaysScreen extends React.Component {
         });
         Picker.show();
     }
+    /*
+    <StatusBar
+                    backgroundColor={theme.themeColor}
+                    barStyle="light-content"
+                    />
+    */
     render() {
         const { title, isTop, date, week, dayID, isRepeat, confirmModalVisible, message, repeatText, switchThumbColor, repeatModalVisible } = this.state;
         return (
@@ -391,7 +416,7 @@ class AddDaysScreen extends React.Component {
                     </View>
                     <TouchableHighlight
                         onPress={() => this.saveInfo()}
-                        underlayColor='rgba(0,0,0,0.2)' style={[styles.eventButtonSave, styles.eventButtonItem]} >
+                        underlayColor='rgba(0,0,0,0.2)' style={[styles.eventButtonSave, styles.eventButtonItem,{backgroundColor:theme.themeColor}]} >
                         <Text allowFontScaling={false} style={styles.eventButtonText}>保存</Text>
                     </TouchableHighlight>
                     {
@@ -513,7 +538,7 @@ var styles = StyleSheet.create({
         height: 40,
     },
     eventButtonSave: {
-        backgroundColor: "#53CDFF",
+        //backgroundColor: "#53CDFF",
         marginBottom: 20,
         marginTop: 40
     },
