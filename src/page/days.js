@@ -8,9 +8,12 @@ import { calendar } from '../api.js';
 import { getDiffDate, getDay, repeatDate, insert_sort } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
 import { PaddingTop } from '../deviceInfo.js';
+//引入主题配置文件
+import { theme } from '../theme.js';
 const year = 2019;
 const key = '50c6f7517446dbb4d803a1c7f962ebaf';
 const fileName = 'days.txt';
+const themeBgImg = theme.bg[0];
 class DaysScreen extends React.Component {
   //标题
   static navigationOptions = ({ navigation }) => ({
@@ -43,10 +46,11 @@ class DaysScreen extends React.Component {
    */
   componentWillMount(){
     const that = this;
-    that.getThemeBgImg();
+    
   }
   componentDidMount() {
     const that = this;
+    that.getThemeBgImg();
     _fileEx(fileName, function (res) {
       if (res) {
         that.updateData();
@@ -81,12 +85,38 @@ class DaysScreen extends React.Component {
       AsyncStorage.getItem(
         'themeInfo',
         (error, result) => {
-          if (error) {
-            //alert('取值失败:' + error);
-          } else {
+          if(result!=null){
             that.setState({
               themeInfo:JSON.parse(result)
             })
+          }else{
+            that.setState({
+              themeInfo:themeBgImg
+            })
+            try {
+              AsyncStorage.removeItem(
+                  'themeInfo',
+                  (error) => {
+                      try {
+                          AsyncStorage.setItem(
+                              'themeInfo',
+                              JSON.stringify(themeBgImg),
+                              (error) => {
+                                  if (error) {
+                                      //alert('存值失败:', error);
+                                  } else {
+                                      //alert('存值成功!');
+                                  }
+                              }
+                          );
+                      } catch (error) {
+                          //alert('失败' + error);
+                      }
+                  }
+              );
+          } catch (error) {
+              //alert('失败' + error);
+          }
           }
         }
       )
@@ -328,9 +358,10 @@ class DaysScreen extends React.Component {
   //<Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
 
   render() {
+    const {themeInfo}=this.state;
     return <View style={[styles.container, { paddingTop: PaddingTop }]} >
       {
-        JSON.stringify(this.state.themeInfo)!='{}'?<Image resizeMode='cover' source={{uri: this.state.themeInfo.img}} style={styles.backgroundImage} />:null
+        JSON.stringify(themeInfo)!="{}"?<Image resizeMode='cover' source={{uri: themeInfo.img}} style={styles.backgroundImage} />:null
       }
       {
         this.show()

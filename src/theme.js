@@ -4,42 +4,40 @@ export const theme = {
     bg:[
         {
             id:'0',
-            textColor:'#777777',//days页面事件展示的颜色
-            dateTextColor:'#999999',//days页面事件展示的日期颜色
-            historyListTextColor:'#777777',
-            tabbarBackColor:'#94BACF',
-            img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561455171457&di=c9bdd45b3e4c513b266cf3bea165ac77&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F67e2956a9e28743b6d73bd47fafce6db84065f8f6395-h5aOnc_fw658'
+           img:'http://hbimg.b0.upaiyun.com/741017cfd5867f0478c81985fcbe183cb71a0d9513f21-0tki1P_fw658'
         },
         {
             id:'1',
-            textColor:'#777777',//days页面事件展示的颜色
-            dateTextColor:'#999999',//days页面事件展示的日期颜色
-            historyListTextColor:'#777777',
-            tabbarBackColor:'#94BACF',
-            img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561455224584&di=329c191022e688b647e3fb344c757862&imgtype=0&src=http%3A%2F%2Fpic.616pic.com%2Fbg_w1180%2F00%2F11%2F26%2FBL91HY1D6K.jpg'
+            img:'http://hbimg.b0.upaiyun.com/67e2956a9e28743b6d73bd47fafce6db84065f8f6395-h5aOnc_fw658'
         },
         {
             id:'2',
-            textColor:'#444444',//days页面事件展示的颜色
-            dateTextColor:'#666666',//days页面事件展示的日期颜色
-            historyListTextColor:'#444444',
-            tabbarBackColor:'#94BACF',
-            img:'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3601828687,1820936947&fm=26&gp=0.jpg'
+            img:'http://pic.616pic.com/bg_w1180/00/11/26/BL91HY1D6K.jpg'
         },
         {
             id:'3',
-            textColor:'rgba(255,255,255,0.7)',//days页面事件展示的颜色
-            dateTextColor:'rgba(240,240,237,0.7)',//days页面事件展示的日期颜色
-            historyListTextColor:'rgba(240,240,237,0.7)',
-            img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561455290472&di=538b274ffd26b6d6ec45ffe48c65c8df&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F741017cfd5867f0478c81985fcbe183cb71a0d9513f21-0tki1P_fw658'
+            img:'http://pic.616pic.com/bg_w1180/00/24/98/lF2rhQFG0q.jpg'
         },
         {
             id:'4',
-            textColor:'rgba(255,255,255,0.7)',//days页面事件展示的颜色
-            dateTextColor:'rgba(240,240,237,0.7)',//days页面事件展示的日期颜色
-            historyListTextColor:'rgba(240,240,237,0.7)',
-            img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561455331617&di=82a7ad867bdd21239642e4ba582a2417&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F7f5f3d6059845906d252b45243e0d80c76103301c115-CwWNhl_fw236'
-        }
+            img:'http://hbimg.b0.upaiyun.com/10439ad3dc2ee28d6a39f924c85b45062322157386b9-ID8WDU_fw658'
+        },
+        {
+            id:'5',
+            img:'http://img.zcool.cn/community/016c8e565bd50632f8759647a7eba1.png'
+        },
+        {
+            id:'6',
+            img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1562226100&di=035a4d1bd335951e24ec5a1572784c56&imgtype=jpg&er=1&src=http%3A%2F%2Fimg4.duitang.com%2Fuploads%2Fitem%2F201405%2F14%2F20140514193952_GJV3f.thumb.600_0.jpeg'
+        },
+        {
+            id:'7',
+            img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1562226172&di=a36d10c41c332bce3eb85fe95c9d0ac5&imgtype=jpg&er=1&src=http%3A%2F%2Fimg4.duitang.com%2Fuploads%2Fitem%2F201502%2F28%2F20150228214702_3PG2Q.thumb.224_0.jpeg'
+        },
+        {
+            id:'8',
+            img:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561631627684&di=6d8d9e77e1905ec57e657a53332fb8be&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F7f5f3d6059845906d252b45243e0d80c76103301c115-CwWNhl_fw236'
+        },
     ],
     
 };

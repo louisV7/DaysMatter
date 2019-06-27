@@ -10,6 +10,7 @@ import { PaddingTop } from '../deviceInfo.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
 import { theme } from '../theme.js';
 import { STATUS_BAR_HEIGHT } from '../deviceInfo.js';
+import bgImg from '../bgImg.js';
 
 const height = STATUS_BAR_HEIGHT + 44;
 const paddingTop = STATUS_BAR_HEIGHT;
@@ -34,7 +35,8 @@ export default class DaysScreen extends React.Component {
             imgData: theme.bg,
             daysData: [],
             topDayData: {},
-            currentImg: theme.bg[0].img
+            currentImg: theme.bg[0].img,
+            currentImgIndex:0
         }
         this.selectBgImg = this.selectBgImg.bind(this);
         this.useBgImg = this.useBgImg.bind(this);
@@ -58,8 +60,10 @@ export default class DaysScreen extends React.Component {
                     if (error) {
                         //alert('取值失败:' + error);
                     } else {
+                        //console.log(result)
                         that.setState({
-                            currentImg: JSON.parse(result).img
+                            currentImg: JSON.parse(result).img,
+                            currentImgIndex:JSON.parse(result).id
                         })
                     }
                 }
@@ -70,18 +74,14 @@ export default class DaysScreen extends React.Component {
     }
     selectBgImg(value) {
         this.setState({
-            currentImg: value.img
+            currentImg: value.img,
+            currentImgIndex:value.id
         })
     }
     useBgImg() {
-        const { currentImg } = this.state;
-        //alert(currentImg)
+        const { currentImg,currentImgIndex } = this.state;
         let obj = {
-            id: '',
-            textColor: '',//days页面事件展示的颜色
-            dateTextColor: '',//days页面事件展示的日期颜色
-            historyListTextColor: '',
-            tabbarBackColor: '',
+            id: currentImgIndex,
             img: currentImg
         }
         this.setThemeBgImg(obj);
@@ -117,18 +117,7 @@ export default class DaysScreen extends React.Component {
 
 
     }
-    imgRender({ item }) {
-        return (
-            <TouchableHighlight underlayColor='rgba(0,0,0,0.2)' style={styles.imgItem}
-                onPress={() => this.selectBgImg(item)}
-            >
-                <Image
-                    style={{ width: 60, height: 65, borderRadius: 12 }}
-                    source={{ uri: item.img }}
-                />
-            </TouchableHighlight>
-        )
-    }
+    
     getData() {
         const that = this;
         let pastTrue = [];
@@ -200,7 +189,7 @@ export default class DaysScreen extends React.Component {
     }
     render() {
         const { navigation } = this.props;
-        const { imgData, topDayData, daysData, currentImg } = this.state;
+        const {imgData, topDayData, daysData, currentImg,currentImgIndex } = this.state;
         return (
             <View style={[styles.container]}>
                 <View style={styles.styleShow}>
@@ -237,20 +226,44 @@ export default class DaysScreen extends React.Component {
                     </View>
                 </View>
                 <View style={styles.bgImgSelectBox}>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        <FlatList
-                            data={imgData}
-                            renderItem={this.imgRender.bind(this)}
-                            keyExtractor={(item) => item.id}
-                            horizontal={true}
-                        >
-                        </FlatList>
+                    <ScrollView horizontal={true} 
+                    ref={scrollView => {
+                        if(scrollView !== null){
+                            setTimeout(()=>{
+                                scrollView.scrollTo({x:currentImgIndex*60,y:0,animated:true},1) 
+                            })
+                        }}}
+                     showsHorizontalScrollIndicator={false}>
+                        {
+                            imgData.map((item,index)=>{
+                                return (
+                                    <TouchableHighlight key={index} underlayColor='rgba(0,0,0,0.2)' style={styles.imgItem}
+                                        onPress={() => this.selectBgImg(item)}
+                                    >
+                                        <View style={[styles.imgItemView]}>
+                                            <Image
+                                                style={{ width: 60, height: 65, borderRadius: 12,}}
+                                                source={{uri:item.img}}
+                                                
+                                            />
+                                            {
+                                                currentImgIndex==index?
+                                                <View style={styles.checkcircle} >
+                                                    <AntDesign  name='checkcircle' size={25} color={theme.themeColor}></AntDesign>
+                                                </View>:null
+                                            }
+                                        </View>
+                                    </TouchableHighlight>
+                                )
+                            })
+                        }
                     </ScrollView>
                 </View>
             </View>
         )
     }
 }
+
 var styles = StyleSheet.create({
     block: {
         flexDirection: "column",
@@ -293,7 +306,25 @@ var styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        marginRight: 10
+        marginRight: 10,
+    },
+    imgItemView:{
+        width:'100%',
+        height:'100%',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        position:"relative"
+    },
+    checkcircle:{
+        width:'100%',
+        height:'100%',
+        backgroundColor:'rgba(0,0,0,0.3)',
+        borderRadius: 12,
+        position:"absolute",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
     },
     daysPage: {
         backgroundColor: "transparent",
