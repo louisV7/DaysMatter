@@ -10,7 +10,6 @@ import { PaddingTop } from '../deviceInfo.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
 import { theme } from '../theme.js';
 import { STATUS_BAR_HEIGHT } from '../deviceInfo.js';
-import bgImg from '../bgImg.js';
 
 const height = STATUS_BAR_HEIGHT + 44;
 const paddingTop = STATUS_BAR_HEIGHT;
@@ -25,7 +24,7 @@ export default class DaysScreen extends React.Component {
                 underlayColor='rgba(0,0,0,0.2)'
                 style={styles.headerRightButtonBox}
             >
-                <Text style={styles.headerRightButton} allowFontScaling={false}>使用</Text>
+                <Text style={styles.headerRightButton} >使用</Text>
             </TouchableHighlight>
         ),
     });
@@ -169,18 +168,18 @@ export default class DaysScreen extends React.Component {
             >
                 <View style={[styles.dayItem, styles.inlineBlock]}>
                     <View style={styles.dayItemLeft}>
-                        <Text allowFontScaling={false} style={{ fontSize: 16 }}>{item.title}{item.dateStatus}</Text>
-                        <Text allowFontScaling={false} style={[styles.dayDate]}>{item.repeatDate} {item.week}</Text>
+                        <Text  style={{ fontSize: 16 }}>{item.title}{item.dateStatus}</Text>
+                        <Text  style={[styles.dayDate]}>{item.repeatDate} {item.week}</Text>
                     </View>
                     <View style={styles.dayItemRight}>
-                        <Text allowFontScaling={false} style={{
+                        <Text  style={{
                             textAlign: "right",
                             fontSize: 14,
                             fontWeight: 'bold',
                             //color: themeInfo.textColor
                             //color: item.isPast ? '#999999' : '#666666'
                         }}>{item.dayNum}</Text>
-                        <Text allowFontScaling={false} style={[styles.dayLogo]}>{item.unit}</Text>
+                        <Text  style={[styles.dayLogo]}>{item.unit}</Text>
                     </View>
 
                 </View>
@@ -207,12 +206,12 @@ export default class DaysScreen extends React.Component {
                         />
                         <View style={{ marginTop: 10 }}>
                             <View style={styles.TopDayCOntainer}>
-                                <Text allowFontScaling={false} style={[styles.topDayDataTitle]}>{topDayData.title}{topDayData.dateStatus}</Text>
+                                <Text  style={[styles.topDayDataTitle]}>{topDayData.title}{topDayData.dateStatus}</Text>
                                 <View style={styles.inlineBlock}>
-                                    <Text allowFontScaling={false} style={[styles.topDayDataDayNum]}>{topDayData.dayNum}</Text>
-                                    <Text allowFontScaling={false} >{topDayData.unit}</Text>
+                                    <Text  style={[styles.topDayDataDayNum]}>{topDayData.dayNum}</Text>
+                                    <Text  >{topDayData.unit}</Text>
                                 </View>
-                                <Text allowFontScaling={false} style={[styles.topDayDataDate]}>{topDayData.repeatDate} {topDayData.week}</Text>
+                                <Text  style={[styles.topDayDataDate]}>{topDayData.repeatDate} {topDayData.week}</Text>
                             </View>
                             <View style={styles.dayItemContainer}>
                                 <FlatList

@@ -16,7 +16,7 @@ import _ from 'lodash';
     ]})
 })*/
 //0.56(包括)版本之后
-/*Text.render = _.wrap(Text.render, function (func, ...args) {
+Text.render = _.wrap(Text.render, function (func, ...args) {
     let originText = func.apply(this, args)
     return React.cloneElement(originText, {allowFontScaling: false,style:[
         originText.props.style,
@@ -25,7 +25,7 @@ import _ from 'lodash';
 })
 var styles = StyleSheet.create({
     defaultFontFamily:{
-        fontFamily: '刻石录颜体',
+        //fontFamily: 'Zocial',
     }
-})*/
+})
 AppRegistry.registerComponent(appName, () => App);

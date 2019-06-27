@@ -278,18 +278,18 @@ class DaysScreen extends React.Component {
       >
         <View style={[styles.dayItem, styles.inlineBlock]}>
           <View style={styles.dayItemLeft}>
-            <Text allowFontScaling={false} style={{ fontSize: 16}}>{item.title}{item.dateStatus}</Text>
-            <Text allowFontScaling={false} style={[styles.dayDate]}>{item.repeatDate} {item.week}</Text>
+            <Text  style={{ fontSize: 16}}>{item.title}{item.dateStatus}</Text>
+            <Text  style={[styles.dayDate]}>{item.repeatDate} {item.week}</Text>
           </View>
           <View style={styles.dayItemRight}>
-            <Text allowFontScaling={false} style={{
+            <Text  style={{
               textAlign: "right",
               fontSize: 20,
               fontWeight: 'bold',
               //color: themeInfo.textColor
               //color: item.isPast ? '#999999' : '#666666'
             }}>{item.dayNum}</Text>
-            <Text allowFontScaling={false} style={[styles.dayLogo]}>{item.unit}</Text>
+            <Text  style={[styles.dayLogo]}>{item.unit}</Text>
           </View>
 
         </View>
@@ -320,7 +320,7 @@ class DaysScreen extends React.Component {
               underlayColor='#B9B8B6'>
               <View style={styles.addEventBox}>
                 <Ionicons name='md-add' size={30} color="#B9B8B6" />
-                <Text allowFontScaling={false} style={{ color: '#B9B8B6', fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
+                <Text  style={{ color: '#B9B8B6', fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
               </View>
             </TouchableHighlight>
           </View>
@@ -329,12 +329,12 @@ class DaysScreen extends React.Component {
         return (
           <ScrollView>
             <View style={styles.TopDayCOntainer}>
-              <Text allowFontScaling={false} style={[styles.topDayDataTitle]}>{topDayData.title}{topDayData.dateStatus}</Text>
+              <Text  style={[styles.topDayDataTitle]}>{topDayData.title}{topDayData.dateStatus}</Text>
               <View style={styles.inlineBlock}>
-                <Text allowFontScaling={false} style={[styles.topDayDataDayNum]}>{topDayData.dayNum}</Text>
-                <Text allowFontScaling={false} >{topDayData.unit}</Text>
+                <Text  style={[styles.topDayDataDayNum]}>{topDayData.dayNum}</Text>
+                <Text >{topDayData.unit}</Text>
               </View>
-              <Text allowFontScaling={false} style={[styles.topDayDataDate]}>{topDayData.repeatDate} {topDayData.week}</Text>
+              <Text  style={[styles.topDayDataDate]}>{topDayData.repeatDate} {topDayData.week}</Text>
             </View>
             <View style={styles.dayItemContainer}>
               <FlatList

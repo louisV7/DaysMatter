@@ -67,7 +67,7 @@ class AddDaysScreen extends React.Component {
                 underlayColor='rgba(0,0,0,0.2)'
                 style={styles.headerRightButtonBox}
             >
-                <Text style={styles.headerRightButton} allowFontScaling={false}>保存</Text>
+                <Text style={styles.headerRightButton} >保存</Text>
             </TouchableHighlight>
         ),
     });
@@ -369,14 +369,13 @@ class AddDaysScreen extends React.Component {
                             underlineColorAndroid={'#53CDFF'}
                             selectionColor={'#53CDFF'}
                             placeholder='点击这里输入事件名称'
-                            allowFontScaling={false}
                             onChangeText={(text) => this.setState({ title: text })} value={title}></TextInput>
                     </View>
                     <View style={[styles.inlineBlock, styles.infoItem]}>
                         <View style={styles.icon}>
                             <AntDesign name='calendar' size={25} color="#999999"></AntDesign>
                         </View>
-                        <Text allowFontScaling={false} style={styles.iconText} >日期</Text>
+                        <Text  style={styles.iconText} >日期</Text>
                         <DatePicker style={styles.datePicker}
                             date={date}
                             mode="date"
@@ -391,7 +390,7 @@ class AddDaysScreen extends React.Component {
                         <View style={styles.icon}>
                             <MaterialCommunityIcons name='format-wrap-top-bottom' size={25} color="#999999"></MaterialCommunityIcons>
                         </View>
-                        <Text allowFontScaling={false} style={styles.iconText} >置顶</Text>
+                        <Text  style={styles.iconText} >置顶</Text>
                         <Switch style={styles.isTop} trackColor={'#53CDFF'} thumbColor={switchThumbColor} value={isTop} onValueChange={(value) => this.setState({
                             isTop: value,
                             switchThumbColor: value ? '#53CDFF' : ''
@@ -401,7 +400,7 @@ class AddDaysScreen extends React.Component {
                         <View style={styles.icon}>
                             <Feather name='repeat' size={25} color="#999999"></Feather>
                         </View>
-                        <Text allowFontScaling={false} style={styles.iconText} >重复</Text>
+                        <Text  style={styles.iconText} >重复</Text>
                         <TouchableHighlight style={{ flex: 4 }} underlayColor='#ffffff' onPress={() => {
                             this.createData();
                             this.setState({
@@ -409,7 +408,7 @@ class AddDaysScreen extends React.Component {
                             })
                         }}>
                             <View style={{ width: '100%', flexDirection: "row", justifyContent: "flex-end", alignItems: "center", }}>
-                                <Text allowFontScaling={false} style={{ marginRight: 10 }}>{repeatText}</Text>
+                                <Text  style={{ marginRight: 10 }}>{repeatText}</Text>
                                 <MaterialIcons name='arrow-drop-down' size={25} color="#999999"></MaterialIcons>
                             </View>
                         </TouchableHighlight>
@@ -417,14 +416,14 @@ class AddDaysScreen extends React.Component {
                     <TouchableHighlight
                         onPress={() => this.saveInfo()}
                         underlayColor='rgba(0,0,0,0.2)' style={[styles.eventButtonSave, styles.eventButtonItem,{backgroundColor:theme.themeColor}]} >
-                        <Text allowFontScaling={false} style={styles.eventButtonText}>保存</Text>
+                        <Text  style={styles.eventButtonText}>保存</Text>
                     </TouchableHighlight>
                     {
                         dayID == "-1"
                             ? null
                             : <TouchableHighlight onPress={() => this.deleteday()}
                                 underlayColor='rgba(0,0,0,0.2)' style={[styles.eventButtonDelete, styles.eventButtonItem]} >
-                                <Text allowFontScaling={false} style={styles.eventButtonText} >删除</Text>
+                                <Text  style={styles.eventButtonText} >删除</Text>
                             </TouchableHighlight>
                     }
                 </View>

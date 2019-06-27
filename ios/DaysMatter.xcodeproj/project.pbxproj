@@ -70,6 +70,10 @@
 		BF1E9915AC454B999CB64EB4 /* 王汉宗粗楷体简.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 367BFB4604244D1598427305 /* 王汉宗粗楷体简.ttf */; };
 		51E462F30BBA461AB3ACF1B1 /* 思源宋体 SC-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B3F46CF6DFC74BFE85B16944 /* 思源宋体 SC-Bold.otf */; };
 		FEC328AAF85F4DA6BBA6BA1D /* 花园明朝体HanaMinB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A741EEA0E1843EE80DB7C6A /* 花园明朝体HanaMinB.ttf */; };
+		DEF0B8A635B64A7192AB3EF2 /* _思源黑体SourceHanSansCN-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A5450608EF1C467DAA30377D /* _思源黑体SourceHanSansCN-Light.otf */; };
+		B0A2D6C47B0849BE96EF43E4 /* 851手書き雑フォント.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ECA29FDB7B8549E29E190F8B /* 851手書き雑フォント.ttf */; };
+		779E9228AB7148EE8CE2CF79 /* 思源宋体SC-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 702DD756F2C0488D9622A6CB /* 思源宋体SC-Light.otf */; };
+		D33A8DC4F0DB4DF78233B87F /* 濑户字体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79B0BD68495B49979CE1C14E /* 濑户字体.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -415,6 +419,10 @@
 		367BFB4604244D1598427305 /* 王汉宗粗楷体简.ttf */ = {isa = PBXFileReference; name = "王汉宗粗楷体简.ttf"; path = "../assets/fonts/王汉宗粗楷体简.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		B3F46CF6DFC74BFE85B16944 /* 思源宋体 SC-Bold.otf */ = {isa = PBXFileReference; name = "思源宋体 SC-Bold.otf"; path = "../assets/fonts/思源宋体 SC-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		9A741EEA0E1843EE80DB7C6A /* 花园明朝体HanaMinB.ttf */ = {isa = PBXFileReference; name = "花园明朝体HanaMinB.ttf"; path = "../assets/fonts/花园明朝体HanaMinB.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A5450608EF1C467DAA30377D /* _思源黑体SourceHanSansCN-Light.otf */ = {isa = PBXFileReference; name = "_思源黑体SourceHanSansCN-Light.otf"; path = "../assets/fonts/_思源黑体SourceHanSansCN-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		ECA29FDB7B8549E29E190F8B /* 851手書き雑フォント.ttf */ = {isa = PBXFileReference; name = "851手書き雑フォント.ttf"; path = "../assets/fonts/851手書き雑フォント.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		702DD756F2C0488D9622A6CB /* 思源宋体SC-Light.otf */ = {isa = PBXFileReference; name = "思源宋体SC-Light.otf"; path = "../assets/fonts/思源宋体SC-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		79B0BD68495B49979CE1C14E /* 濑户字体.ttf */ = {isa = PBXFileReference; name = "濑户字体.ttf"; path = "../assets/fonts/濑户字体.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -723,6 +731,10 @@
 				367BFB4604244D1598427305 /* 王汉宗粗楷体简.ttf */,
 				B3F46CF6DFC74BFE85B16944 /* 思源宋体 SC-Bold.otf */,
 				9A741EEA0E1843EE80DB7C6A /* 花园明朝体HanaMinB.ttf */,
+				A5450608EF1C467DAA30377D /* _思源黑体SourceHanSansCN-Light.otf */,
+				ECA29FDB7B8549E29E190F8B /* 851手書き雑フォント.ttf */,
+				702DD756F2C0488D9622A6CB /* 思源宋体SC-Light.otf */,
+				79B0BD68495B49979CE1C14E /* 濑户字体.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1196,6 +1208,10 @@
 				BF1E9915AC454B999CB64EB4 /* 王汉宗粗楷体简.ttf in Resources */,
 				51E462F30BBA461AB3ACF1B1 /* 思源宋体 SC-Bold.otf in Resources */,
 				FEC328AAF85F4DA6BBA6BA1D /* 花园明朝体HanaMinB.ttf in Resources */,
+				DEF0B8A635B64A7192AB3EF2 /* _思源黑体SourceHanSansCN-Light.otf in Resources */,
+				B0A2D6C47B0849BE96EF43E4 /* 851手書き雑フォント.ttf in Resources */,
+				779E9228AB7148EE8CE2CF79 /* 思源宋体SC-Light.otf in Resources */,
+				D33A8DC4F0DB4DF78233B87F /* 濑户字体.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
