@@ -1,3 +1,6 @@
+export function test(){
+    
+}
 //重复功能,计算传入的日期在重复标准后的日子
 export function repeatDate(date, repeatcycle) {
     if (repeatcycle == '不重复') {
@@ -124,19 +127,24 @@ export function getDiffDate(targetDate) {
     if (diffDate == 0) {//今天
         result = {
             text: '就是今天',
-            dayNum: 0
+            dayNum: 0,
+            diff:diff
         }
     } else if (diffDate > 0) {//过去
         result = {
             text: '已过去',
-            dayNum: diffDate
+            dayNum: diffDate,
+            diff:diff
         }
     } else {//还没到
         result = {
             text: '还有',
-            dayNum: Math.abs(diffDate)
+            dayNum: Math.abs(diffDate),
+            diff:diff
         }
     }
+    //setTimeout("showtime()",1000);
+    //setTimeout(getDiffDate(targetDate), 1000);
     return result;
 }
 

@@ -108,8 +108,8 @@ android {
         versionCode 1
         versionName "1.0"
         manifestPlaceholders = [
-                JPUSH_APPKEY: "",//极光推送appkey
-                APP_CHANNEL : "default"
+                JPUSH_APPKEY: "af78b13649d37332a13d77b9",//极光推送appkey
+                APP_CHANNEL : "developer-default"
         ]
 
     }

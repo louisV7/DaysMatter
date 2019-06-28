@@ -16,10 +16,14 @@ public class MainActivity extends ReactActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
         // 这里定义了在加载js的时候，同时弹起启动屏
         // 第二个参数true，是启动页全屏显示，隐藏了状态栏。
         SplashScreen.show(this, true);
-        super.onCreate(savedInstanceState);
+        
+
+        JPushInterface.init(this);//极光推送
     }
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -40,12 +44,6 @@ public class MainActivity extends ReactActivity {
         };
     }
     //极光推送
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        JPushInterface.init(this);
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -56,6 +54,11 @@ public class MainActivity extends ReactActivity {
     protected void onResume() {
         super.onResume();
         JPushInterface.onResume(this);
-    }*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
     //极光推送
 }

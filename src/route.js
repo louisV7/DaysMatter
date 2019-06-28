@@ -16,7 +16,6 @@ import { STATUS_BAR_HEIGHT } from './deviceInfo.js';
 import {theme} from './theme.js';
 const height = STATUS_BAR_HEIGHT + 44;
 const paddingTop = STATUS_BAR_HEIGHT;
-let tabbarBackgroundColor='' ;
 //底部tabbar的图标
 const getTabBarIcon = (navigation, focused, tintColor) => {
     const { routeName } = navigation.state;

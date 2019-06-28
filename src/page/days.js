@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, ScrollView, FlatList, TouchableHighlight, Activ
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';//https://oblador.github.io/react-native-vector-icons/图标地址
 import AsyncStorage from '@react-native-community/async-storage';
-
+import JPushModule from 'jpush-react-native';//极光推送
 import { calendar } from '../api.js';
 import { getDiffDate, getDay, repeatDate, insert_sort } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
@@ -41,15 +41,16 @@ class DaysScreen extends React.Component {
     }
   }
   /*
-  _deleteFile(fileName, function (res) {
+  
+   _deleteFile(fileName, function (res) {
       
     })
-   
    */
 
   componentDidMount() {
     const that = this;
     that.getThemeBgImg();
+    
     _fileEx(fileName, function (res) {
       if (res) {
         that.updateData();
@@ -57,9 +58,41 @@ class DaysScreen extends React.Component {
         that.initData();
       }
     })
-
-
+   
+    //极光推送
+    
+    JPushModule.initPush();// 初始化 JPush
+    // 新版本必需写回调函数
+    // JPushModule.notifyJSDidLoad();
+    JPushModule.notifyJSDidLoad((resultCode) => {
+      if (resultCode === 0) {
+        console.log(resultCode);
+       }
+    });
+    // 接收自定义消息
+    JPushModule.addReceiveCustomMsgListener((message) => {
+      console.log("接收自定义消息: " + message);
+      //this.setState({ pushMsg: message });
+    });
+    // 接收推送通知
+    JPushModule.addReceiveNotificationListener((message) => {
+      console.log("接收推送通知: " + message);
+    });
+    // 打开通知
+    JPushModule.addReceiveOpenNotificationListener((map) => {
+      console.log("Opening notification!");
+      console.log("map.extra: " + map.extras);
+      // 可执行跳转操作，也可跳转原生页面
+      // this.props.navigation.navigate("SecondActivity");
+    });
+    //极光推送
   }
+  componentWillUnmount() {
+    JPushModule.removeReceiveCustomMsgListener();
+    JPushModule.removeReceiveNotificationListener();
+    JPushModule.removeReceiveOpenNotificationListener();
+  }
+
   componentWillReceiveProps(nextProps) {
     let data = [];
     const that = this;
@@ -149,8 +182,21 @@ class DaysScreen extends React.Component {
               week: getDay(item.startday),
               isTop: count == 0 ? true : false,
               isPast: getDiffDate(item.startday).text == '已过去' ? true : false,
-              repeatText: '不重复'
+              repeatText: '不重复',
+              isRemind:false,
+              diff:getDiffDate(item.startday).diff,
             }
+            /*if(dayItem.dayNum==0){
+              // 推送事件 业务代码 请提取到函数里面    
+              JPushModule.sendLocalNotification({
+                buildId: 1, // 设置通知样式
+                id: 5, // 通知的 id, 可用于取消通知
+                extra: { key1: dayItem.id }, // extra 字段 就是我们需要传递的参数
+                fireTime: new Date().getTime(), // 通知触发时间的时间戳（毫秒）
+                title: '通知',
+                content: dayItem.title,
+              })
+            }*/
             daysArr.push(dayItem);
             count++;
           }
@@ -189,8 +235,21 @@ class DaysScreen extends React.Component {
           week: getDay(newDate),
           isTop: item.isTop,
           isPast: getDiffDate(newDate).text == '已过去' ? true : false,
-          repeatText: item.repeatText
+          repeatText: item.repeatText,
+          isRemind:false,
+          diff:getDiffDate(newDate).diff,
         }
+        /*if(dayItem.dayNum==0){
+          // 推送事件 业务代码 请提取到函数里面    
+          JPushModule.sendLocalNotification({
+            buildId: 1, // 设置通知样式
+            id: 5, // 通知的 id, 可用于取消通知
+            extra: { key1: dayItem.id }, // extra 字段 就是我们需要传递的参数
+            fireTime: new Date().getTime(), // 通知触发时间的时间戳（毫秒）
+            title: '通知',
+            content: dayItem.title,
+          })
+        }*/
         dataArr.push(dayItem);
       })
       _deleteFile(fileName, function (res) {
@@ -210,7 +269,7 @@ class DaysScreen extends React.Component {
     let pastFalse = [];
     let result = [];
     let loaded = false;
-    let data=[];
+    let data = [];
     //如果是还没过去的日期按照从小到大排序，是已经过去的日期按照从大到小排序
     _writeFile(fileName, JSON.stringify(daysArr), function (res) {
       if (res == 1) {
@@ -303,15 +362,15 @@ class DaysScreen extends React.Component {
     if (loaded) {
       if (isNUll) {
         return (
-          <View style={[styles.NoEvent,{top:height}]}>
+          <View style={[styles.NoEvent, { top: height }]}>
             <TouchableHighlight
               onPress={() => navigation.push('AddDay', {
                 id: "-1"
               })}
-              underlayColor='rgba(255,255,255,0.5)' style={{borderRadius: 12,}}>
+              underlayColor='rgba(255,255,255,0.5)' style={{ borderRadius: 12, }}>
               <View style={styles.addEventBox}>
                 <Ionicons name='md-add' size={30} color="#666666" />
-                <Text style={{ color:'#666666',fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
+                <Text style={{ color: '#666666', fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
               </View>
             </TouchableHighlight>
           </View>
@@ -340,7 +399,7 @@ class DaysScreen extends React.Component {
       }
     } {
       return (
-        <View style={[styles.loading,{top:height}]}>
+        <View style={[styles.loading, { top: height }]}>
           <ActivityIndicator size="large" color={theme.loading} />
         </View>
       );
@@ -349,7 +408,7 @@ class DaysScreen extends React.Component {
   //<Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
 
   render() {
-    const { themeInfo } = this.state;
+    const { themeInfo,daysData } = this.state;
     return <View style={[styles.container, { paddingTop: PaddingTop }]} >
       {
         JSON.stringify(themeInfo) != "{}" ? <Image resizeMode='cover' source={{ uri: themeInfo.img }} style={styles.backgroundImage} /> : null
@@ -429,10 +488,10 @@ var styles = StyleSheet.create({
     textAlign: "right",
     fontSize: 14
   },
- 
+
   //以下是没有数据时的样式
   NoEvent: {
-    flex:1,
+    flex: 1,
     backgroundColor: 'rgba(255,255,255,0.5)',
     flexDirection: "row",
     justifyContent: "center",
@@ -440,7 +499,7 @@ var styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom:0,
+    bottom: 0,
   },
   addEventBox: {
     width: 170,
@@ -460,7 +519,7 @@ var styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom:0,
+    bottom: 0,
     //flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

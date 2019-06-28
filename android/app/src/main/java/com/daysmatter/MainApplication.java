@@ -20,8 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import cn.jpush.reactnativejpush.JPushPackage;//极光推送
+
 public class MainApplication extends Application implements ReactApplication {
-    private boolean SHUTDOWN_TOAST = false;//极光推送
+    private boolean SHUTDOWN_TOAST = true;//关闭初始化成功的toast框
     private boolean SHUTDOWN_LOG = false;//极光推送
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -39,7 +40,8 @@ public class MainApplication extends Application implements ReactApplication {
             new LinearGradientPackage(),
             new VectorIconsPackage(),
             new RNFSPackage(),
-            new RNGestureHandlerPackage()
+            new RNGestureHandlerPackage(),
+            new JPushPackage(SHUTDOWN_TOAST,SHUTDOWN_LOG)//极光推送
       );
     }
 
@@ -48,15 +50,8 @@ public class MainApplication extends Application implements ReactApplication {
       return "index";
     }
 
-    //极光推送
-  /*@Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-              new JPushPackage(SHUTDOWN_TOAST,SHUTDOWN_LOG)
-                new ImagePickerPackage()
-      );
-    }*/
+    
+ 
   };
 
   @Override
