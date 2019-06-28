@@ -1,6 +1,7 @@
 export const theme = {
     themeColor:'#53CDFF',
     pastTheme:'#4B4A50',
+    loading:'#666666',
     bg:[
         {
             id:'0',

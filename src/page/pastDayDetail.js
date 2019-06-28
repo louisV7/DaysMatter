@@ -5,6 +5,8 @@ import {Card} from 'react-native-shadow-cards';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-community/async-storage';
+
 //引入主题配置文件
 import { theme } from '../theme.js';
 import { history, calendar } from '../api.js';
@@ -87,25 +89,11 @@ class PastDayDetail extends React.Component {
                     if(res==1){
                         navigation.push('bottomTabNavigator');
                     }else{
-                        /*that.setState({
-                            toastVisible:true,
-                            message:'出错了，请重试'
-                        })*/
+                       
                     }
-                    /*if (res == 1) {
-                        text == 'edit' ? dispatch(increase_success()) : dispatch(delete_success());
-                        navigation.push('bottomTabNavigator');
-                    } else {
-                        text == 'edit' ? dispatch(increase_fail()) : dispatch(delete_fail());
-                        dispatch(increase_fail());
-
-                    }*/
                 })
             } else {
-                /*that.setState({
-                    toastVisible:true,
-                    message:'出错了，请重试'
-                })*/
+                
             }
         })
     }
@@ -122,17 +110,11 @@ class PastDayDetail extends React.Component {
                         that.updateRedux('delete', data);
                     })
                 } else {
-                    /*that.setState({
-                        toastVisible:true,
-                        message:'出错了，请重试'
-                    })*/
+                   
                 }
             })
         }else{
-            /*that.setState({
-                toastVisible:true,
-                message:'出错了，请重试'
-            })*/
+            
         }
     }
     /*

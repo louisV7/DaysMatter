@@ -10,6 +10,8 @@ import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.
 import { PaddingTop } from '../deviceInfo.js';
 //引入主题配置文件
 import { theme } from '../theme.js';
+import { STATUS_BAR_HEIGHT } from '../deviceInfo.js';
+const height = STATUS_BAR_HEIGHT + 44;
 const year = 2019;
 const key = '50c6f7517446dbb4d803a1c7f962ebaf';
 const fileName = 'days.txt';
@@ -44,10 +46,7 @@ class DaysScreen extends React.Component {
     })
    
    */
-  componentWillMount(){
-    const that = this;
-    
-  }
+
   componentDidMount() {
     const that = this;
     that.getThemeBgImg();
@@ -80,43 +79,43 @@ class DaysScreen extends React.Component {
   }
   //获取背景图
   getThemeBgImg() {
-    const that=this;
+    const that = this;
     try {
       AsyncStorage.getItem(
         'themeInfo',
         (error, result) => {
-          if(result!=null){
+          if (result != null) {
             that.setState({
-              themeInfo:JSON.parse(result)
+              themeInfo: JSON.parse(result)
             })
-          }else{
+          } else {
             that.setState({
-              themeInfo:themeBgImg
+              themeInfo: themeBgImg
             })
             try {
               AsyncStorage.removeItem(
-                  'themeInfo',
-                  (error) => {
-                      try {
-                          AsyncStorage.setItem(
-                              'themeInfo',
-                              JSON.stringify(themeBgImg),
-                              (error) => {
-                                  if (error) {
-                                      //alert('存值失败:', error);
-                                  } else {
-                                      //alert('存值成功!');
-                                  }
-                              }
-                          );
-                      } catch (error) {
-                          //alert('失败' + error);
+                'themeInfo',
+                (error) => {
+                  try {
+                    AsyncStorage.setItem(
+                      'themeInfo',
+                      JSON.stringify(themeBgImg),
+                      (error) => {
+                        if (error) {
+                          //alert('存值失败:', error);
+                        } else {
+                          //alert('存值成功!');
+                        }
                       }
+                    );
+                  } catch (error) {
+                    //alert('失败' + error);
                   }
+                }
               );
-          } catch (error) {
+            } catch (error) {
               //alert('失败' + error);
-          }
+            }
           }
         }
       )
@@ -211,6 +210,7 @@ class DaysScreen extends React.Component {
     let pastFalse = [];
     let result = [];
     let loaded = false;
+    let data=[];
     //如果是还没过去的日期按照从小到大排序，是已经过去的日期按照从大到小排序
     _writeFile(fileName, JSON.stringify(daysArr), function (res) {
       if (res == 1) {
@@ -232,6 +232,7 @@ class DaysScreen extends React.Component {
         })
       }
     })
+
   }
   //置顶操作
   top(arr) {
@@ -264,7 +265,7 @@ class DaysScreen extends React.Component {
   //列表渲染
   dayItemRender({ item }) {
     const { navigation } = this.props;
-    const {themeInfo}=this.state;
+    const { themeInfo } = this.state;
     return (
       <TouchableHighlight
         onPress={() => {
@@ -278,63 +279,53 @@ class DaysScreen extends React.Component {
       >
         <View style={[styles.dayItem, styles.inlineBlock]}>
           <View style={styles.dayItemLeft}>
-            <Text  style={{ fontSize: 16}}>{item.title}{item.dateStatus}</Text>
-            <Text  style={[styles.dayDate]}>{item.repeatDate} {item.week}</Text>
+            <Text style={{ fontSize: 16 }}>{item.title}{item.dateStatus}</Text>
+            <Text style={[styles.dayDate]}>{item.repeatDate} {item.week}</Text>
           </View>
           <View style={styles.dayItemRight}>
-            <Text  style={{
+            <Text style={{
               textAlign: "right",
               fontSize: 20,
               fontWeight: 'bold',
-              //color: themeInfo.textColor
-              //color: item.isPast ? '#999999' : '#666666'
             }}>{item.dayNum}</Text>
-            <Text  style={[styles.dayLogo]}>{item.unit}</Text>
+            <Text style={[styles.dayLogo]}>{item.unit}</Text>
           </View>
 
         </View>
       </TouchableHighlight>
     )
   }
-  /*
-  {
-              item.isPast
-              ?<View style={styles.past}>
-                <Text style={{color:'#999999'}}>已过去</Text>
-              </View>
-              :null
-            }*/
 
   show() {
-    const { daysData, topDayData, loaded,themeInfo } = this.state;
+    const { daysData, topDayData, loaded, themeInfo } = this.state;
     const isNUll = daysData.length != 0 ? false : true
     const { navigation } = this.props;
     if (loaded) {
       if (isNUll) {
         return (
-          <View style={styles.NoEvent}>
+          <View style={[styles.NoEvent,{top:height}]}>
             <TouchableHighlight
               onPress={() => navigation.push('AddDay', {
                 id: "-1"
               })}
-              underlayColor='#B9B8B6'>
+              underlayColor='rgba(255,255,255,0.5)' style={{borderRadius: 12,}}>
               <View style={styles.addEventBox}>
-                <Ionicons name='md-add' size={30} color="#B9B8B6" />
-                <Text  style={{ color: '#B9B8B6', fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
+                <Ionicons name='md-add' size={30} color="#666666" />
+                <Text style={{ color:'#666666',fontSize: 20, flex: 1, marginLeft: 15 }}>添加新日子</Text>
               </View>
             </TouchableHighlight>
           </View>
         )
       } else {
         return (
-          <ScrollView>
+          <ScrollView  >
             <View style={styles.TopDayCOntainer}>
-              <Text  style={[styles.topDayDataTitle]}>{topDayData.title}{topDayData.dateStatus}</Text>
+              <Text style={[styles.topDayDataTitle]}>{topDayData.title}{topDayData.dateStatus}</Text>
               <View style={styles.inlineBlock}>
-                <Text  style={[styles.topDayDataDayNum]}>{topDayData.dayNum}</Text>
+                <Text style={[styles.topDayDataDayNum]}>{topDayData.dayNum}</Text>
                 <Text >{topDayData.unit}</Text>
               </View>
-              <Text  style={[styles.topDayDataDate]}>{topDayData.repeatDate} {topDayData.week}</Text>
+              <Text style={[styles.topDayDataDate]}>{topDayData.repeatDate} {topDayData.week}</Text>
             </View>
             <View style={styles.dayItemContainer}>
               <FlatList
@@ -349,8 +340,8 @@ class DaysScreen extends React.Component {
       }
     } {
       return (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#53CDFF" />
+        <View style={[styles.loading,{top:height}]}>
+          <ActivityIndicator size="large" color={theme.loading} />
         </View>
       );
     }
@@ -358,10 +349,10 @@ class DaysScreen extends React.Component {
   //<Text style={{color:'#ffffff',fontSize:16}}>加载中...</Text>
 
   render() {
-    const {themeInfo}=this.state;
+    const { themeInfo } = this.state;
     return <View style={[styles.container, { paddingTop: PaddingTop }]} >
       {
-        JSON.stringify(themeInfo)!="{}"?<Image resizeMode='cover' source={{uri: themeInfo.img}} style={styles.backgroundImage} />:null
+        JSON.stringify(themeInfo) != "{}" ? <Image resizeMode='cover' source={{ uri: themeInfo.img }} style={styles.backgroundImage} /> : null
       }
       {
         this.show()
@@ -369,7 +360,9 @@ class DaysScreen extends React.Component {
     </View>;
   }
 }
-//<Image resizeMode='cover' source={this.state.bg} style={styles.backgroundImage} />
+/*
+
+*/
 var styles = StyleSheet.create({
   block: {
     flexDirection: "column",
@@ -380,7 +373,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
-    backgroundColor:"transparent"
+    backgroundColor: "transparent"
   },
   backgroundImage: {
     position: 'absolute',
@@ -436,32 +429,24 @@ var styles = StyleSheet.create({
     textAlign: "right",
     fontSize: 14
   },
-  /*past: {
-    position: "absolute",
-    right: 20,
-    borderColor: '#ffffff',
-    borderWidth: 1,
-    width: 50,
-    height: 25,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    transform: [{ rotate: '-20deg' }],
-    borderRadius: 12
-  },*/
+ 
   //以下是没有数据时的样式
   NoEvent: {
-    height: '100%',
-    backgroundColor: '#F2F0EE',
+    flex:1,
+    backgroundColor: 'rgba(255,255,255,0.5)',
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom:0,
   },
   addEventBox: {
     width: 170,
     height: 45,
     borderRadius: 12,
-    borderColor: '#B9B8B6',
+    borderColor: '#666666',
     borderWidth: 2,
     borderStyle: 'solid',
     flexDirection: "row",
@@ -472,10 +457,14 @@ var styles = StyleSheet.create({
   },
   loading: {
     flex: 1,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom:0,
     //flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: "rgba(255,255,255,0.5)",
 
   }
 })

@@ -10,6 +10,8 @@ import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
 
+import java.lang.Override;
+import cn.jpush.android.api.JPushInterface;//极光推送
 public class MainActivity extends ReactActivity {
 
     @Override
@@ -37,4 +39,23 @@ public class MainActivity extends ReactActivity {
         }
         };
     }
+    //极光推送
+    /*@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        JPushInterface.init(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }*/
+    //极光推送
 }

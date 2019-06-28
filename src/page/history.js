@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, FlatList, ScrollView, ActivityIndicator, TouchableHighlight,Image,StatusBar} from "react-native";
+import { View, StyleSheet, Text, FlatList, ScrollView, ActivityIndicator, TouchableHighlight, Image, StatusBar } from "react-native";
 import { connect } from 'react-redux';
 import { Card } from 'react-native-shadow-cards';
 import Feather from 'react-native-vector-icons/Feather';//cloud-rain
 import Ionicons from 'react-native-vector-icons/Ionicons';//多云：ios-partly-sunny，晴天：md-sunny
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { history, calendar, laohuangli, weather, baiduMap,baiduMapAddress } from '../api.js';
+import { history, calendar, laohuangli, weather, baiduMap, baiduMapAddress } from '../api.js';
 import { getLunarDate, getLunarDateString, getTodayDate, getDay } from '../util.js';
-import {PaddingTop} from '../deviceInfo.js';
+import { PaddingTop } from '../deviceInfo.js';
+//引入主题配置文件
+import { theme } from '../theme.js';
+import { STATUS_BAR_HEIGHT } from '../deviceInfo.js';
+const height = STATUS_BAR_HEIGHT + 44;
 const historyKey = 'b469258df91094c4b3b82edabcad82c0';
 const weatherKey = 'ede618bbdfe67ab7f4d22558c12f0ad7';
 const ChinaCalendarKey = 'c18aec5d6c41cb971544cb2c7c919b9f';
@@ -34,14 +38,14 @@ class HistoryScreen extends React.Component {
             themeInfo: {}
         }
     }
-    componentWillMount(){
+    componentWillMount() {
         const that = this;
         that.getThemeBgImg();
-      }
+    }
     componentDidMount() {
         const that = this;
         const date = month + '/' + day;
-        
+
         //天气
         that.getWeather();
         //历史上的今天
@@ -59,42 +63,42 @@ class HistoryScreen extends React.Component {
             }
         })
 
-        
+
     }
-     //获取背景图
-  getThemeBgImg() {
-    const that=this;
-    try {
-      AsyncStorage.getItem(
-        'themeInfo',
-        (error, result) => {
-          if (error) {
-            //alert('取值失败:' + error);
-          } else {
-            that.setState({
-                themeInfo:JSON.parse(result)
-            })
-          }
+    //获取背景图
+    getThemeBgImg() {
+        const that = this;
+        try {
+            AsyncStorage.getItem(
+                'themeInfo',
+                (error, result) => {
+                    if (error) {
+                        //alert('取值失败:' + error);
+                    } else {
+                        that.setState({
+                            themeInfo: JSON.parse(result)
+                        })
+                    }
+                }
+            )
+        } catch (error) {
+            //alert('失败' + error);
         }
-      )
-    } catch (error) {
-      //alert('失败' + error);
     }
-  }
-   //老黄历
-        /*that.fetch(ChinaCalendar(year + '-' + month + '-' + day, ChinaCalendarKey)).then((res) => {
-            if (res.error_code == 0) {
-                that.setState({
-                    suitable: res.result.yi,
-                    avoid: res.result.ji
-                })
-            } else {
-                that.setState({
-                    suitable: '',
-                    avoid: ''
-                })
-            }
-        })*/
+    //老黄历
+    /*that.fetch(ChinaCalendar(year + '-' + month + '-' + day, ChinaCalendarKey)).then((res) => {
+        if (res.error_code == 0) {
+            that.setState({
+                suitable: res.result.yi,
+                avoid: res.result.ji
+            })
+        } else {
+            that.setState({
+                suitable: '',
+                avoid: ''
+            })
+        }
+    })*/
     //获取天气
     getWeather() {
         let city = '';
@@ -123,13 +127,13 @@ class HistoryScreen extends React.Component {
                 //logWarn('获取失败' + err);
             });
     }
-    
+
     //获取城市定位信息
     getCityLocation() {
         const that = this;
         return new Promise((resolve, reject) => {
             //alert(baiduMapAddress(baiduAK,'bd09ll'))
-            that.fetch(baiduMapAddress(baiduAK,'bd09ll')).then((res) =>{
+            that.fetch(baiduMapAddress(baiduAK, 'bd09ll')).then((res) => {
                 //console.log(res)
                 if (res.status == 0) {
                     resolve(res.content)
@@ -137,9 +141,9 @@ class HistoryScreen extends React.Component {
                     reject(res.status);
                 }
             })
-            .catch((error)=>{
-                reject(error.status);
-            })
+                .catch((error) => {
+                    reject(error.status);
+                })
         });
     };
     fetch(url) {
@@ -158,11 +162,11 @@ class HistoryScreen extends React.Component {
     }
     //历史列表
     historyItem({ item }) {
-        const {themeInfo}=this.state;
+        const { themeInfo } = this.state;
         return (
             <View style={[styles.historyItem, styles.inlineBlock]}>
                 <View style={styles.historyItemLeft}>
-                    <Text style={{ fontSize: 18}}>{item.date.split('年')[0]}</Text>
+                    <Text style={{ fontSize: 18 }}>{item.date.split('年')[0]}</Text>
                 </View>
                 <Text style={[styles.historyItemCenter]}>{item.date},{item.title}。</Text>
                 <Text style={[styles.historyItemRight]}></Text>
@@ -173,34 +177,34 @@ class HistoryScreen extends React.Component {
     weatherRender() {
         const { weatherData } = this.state;
         //alert(JSON.stringify(weatherData) != '{}')
-        console.log('渲染前天气信息')
-        console.log(weatherData)
+        //console.log('渲染前天气信息')
+        //console.log(weatherData)
         if (JSON.stringify(weatherData) != '{}') {
-            let iconName=weatherData.realtime.info.indexOf('多云')||weatherData.realtime.info.indexOf('阴')?"ios-partly-sunny":weatherData.realtime.info.indexOf('晴')
-            ?"md-sunny":weatherData.realtime.info.indexOf('雨')?'cloud-rain':''
+            let iconName = weatherData.realtime.info.indexOf('多云')!=-1 || weatherData.realtime.info.indexOf('阴')!=-1 ? "ios-partly-sunny" : weatherData.realtime.info.indexOf('晴')!=-1
+                ? "md-sunny" : weatherData.realtime.info.indexOf('雨')!=-1 ? 'cloud-rain' : ''
             return (
                 <View style={styles.weatherContainer}>
                     <View style={styles.weatherItem}>
                         {
-                            iconName =='cloud-rain'?
-                            <Feather style={{ marginRight: 5 }} name={iconName} size={25} color="#999999"></Feather>:
-                            iconName =='ios-partly-sunny'||iconName =='md-sunny'?
-                            <Ionicons style={{ marginRight: 5 }} name={iconName} size={25} color={iconName =='ios-partly-sunny'?"#999999":"#FFCC01"}></Ionicons>:null
+                            iconName == 'cloud-rain' ?
+                                <Feather style={{ marginRight: 5 }} name={iconName} size={25} color="#999999"></Feather> :
+                                iconName == 'ios-partly-sunny' || iconName == 'md-sunny' ?
+                                    <Ionicons style={{ marginRight: 5 }} name={iconName} size={25} color={iconName == 'ios-partly-sunny' ? "#999999" : "#FFCC01"}></Ionicons> : null
                         }
-                        <Text  style={{ fontSize: 18, marginRight: 20 }}>{weatherData.realtime.info}</Text>
+                        <Text style={{ fontSize: 18, marginRight: 20 }}>{weatherData.realtime.info}</Text>
                         {
                             weatherData.realtime.temperature != '' ?
-                                <Text  style={{ fontSize: 35, fontWeight: "bold" }}>{weatherData.realtime.temperature}℃</Text>
+                                <Text style={{ fontSize: 35, fontWeight: "bold" }}>{weatherData.realtime.temperature}℃</Text>
                                 : null
                         }
                     </View>
                     <View style={styles.weatherItem}>
                         {
                             weatherData.realtime.humidity != '' ?
-                                <Text  style={{ marginRight: 15 }}>湿度：{weatherData.realtime.humidity}</Text>
+                                <Text style={{ marginRight: 15 }}>湿度：{weatherData.realtime.humidity}</Text>
                                 : null
                         }
-                        <Text  style={{ marginRight: 10 }}>{weatherData.realtime.direct} {weatherData.realtime.power}</Text>
+                        <Text style={{ marginRight: 10 }}>{weatherData.realtime.direct} {weatherData.realtime.power}</Text>
                         {
                             weatherData.realtime.aqi != '' ?
                                 <Text >空气指数：{weatherData.realtime.aqi}</Text>
@@ -209,58 +213,59 @@ class HistoryScreen extends React.Component {
                     </View>
                 </View>
             )
-        }else{
+        } else {
             return null;
         }
 
     }
     render() {
-        const { historyData, todayDate, todayLunarDate, loaded, suitable, avoid, weatherData,todayWeek } = this.state;
+        const { historyData, todayDate, todayLunarDate, loaded, suitable, avoid, weatherData, todayWeek } = this.state;
         const { navigation } = this.props;
-        if (!loaded) {
-            return (
-                <View style={styles.loading}>
-                    <ActivityIndicator size="large" color="#53CDFF" />
-                </View>
-            )
-        } else {
-            return (
-                <View style={[styles.container,{paddingTop:PaddingTop}]}>
-                    {
-                        JSON.stringify(this.state.themeInfo)!='{}'?<Image resizeMode='cover' source={{uri: this.state.themeInfo.img}} style={styles.backgroundImage} />:null
-                    }
-                    <Card cornerRadius={0} opacity={0.3} elevation={5} style={styles.todayContainer}>
-                        <View style={styles.todayDate} >
-                            <View style={styles.topLeft}>
-                                <Text  style={styles.date}>{todayDate}</Text>
-                                <Text  style={styles.LunarDate}>{todayLunarDate}</Text>
-                            </View>
-                            <Text  style={styles.topRight}>{todayWeek}</Text>
+        return (
+            <View style={[styles.container, { paddingTop: PaddingTop }]}>
+                {
+                    JSON.stringify(this.state.themeInfo) != '{}' ? <Image resizeMode='cover' source={{ uri: this.state.themeInfo.img }} style={styles.backgroundImage} /> : null
+                }
+                {
+                    !loaded ?
+                        <View style={[styles.loading, { top: height }]}>
+                            <ActivityIndicator size="large" color={theme.loading} />
                         </View>
-                        {this.weatherRender()}
-                    </Card>
-                    <ScrollView style={styles.historyContainer}>
-                        {
-                            historyData.length != 0 ?
-                                <FlatList
-                                    data={historyData}
-                                    renderItem={this.historyItem.bind(this)}
-                                    keyExtractor={(item) => item.e_id}
-                                />
-                                : <View style={styles.limit}>
-                                    <Text  style={{ fontSize: 18 }}>您要访问的数据去月球了</Text>
-                                    <TouchableHighlight underlayColor='#ffffff' onPress={() => navigation.push('AddDay', {
-                                        id: "-1"
-                                    })}>
-                                        <Text  style={{ color: '#53CDFF', fontSize: 18, marginTop: 10 }}>去添加你的新日子吧！</Text>
-                                    </TouchableHighlight>
+                        : <View style={{flex: 1,position: "relative"}}>
+                            <Card cornerRadius={0} opacity={0.3} elevation={5} style={styles.todayContainer}>
+                                <View style={styles.todayDate} >
+                                    <View style={styles.topLeft}>
+                                        <Text style={styles.date}>{todayDate}</Text>
+                                        <Text style={styles.LunarDate}>{todayLunarDate}</Text>
+                                    </View>
+                                    <Text style={styles.topRight}>{todayWeek}</Text>
                                 </View>
-                        }
-                    </ScrollView>
+                                {this.weatherRender()}
+                            </Card>
+                            <ScrollView style={styles.historyContainer}>
+                                {
+                                    historyData.length != 0 ?
+                                        <FlatList
+                                            data={historyData}
+                                            renderItem={this.historyItem.bind(this)}
+                                            keyExtractor={(item) => item.e_id}
+                                        />
+                                        : <View style={styles.limit}>
+                                            <Text style={{ fontSize: 18 }}>您要访问的数据去月球了</Text>
+                                            <TouchableHighlight underlayColor='#ffffff' onPress={() => navigation.push('AddDay', {
+                                                id: "-1"
+                                            })}>
+                                                <Text style={{ fontSize: 18, marginTop: 10,fontWeight:"bold" }}>去添加你的新日子吧！</Text>
+                                            </TouchableHighlight>
+                                        </View>
+                                }
+                            </ScrollView>
 
-                </View>
-            )
-        }
+                        </View>
+                }
+            </View>
+        )
+
 
     }
 }
@@ -296,7 +301,7 @@ var styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        position:"relative"
+        position: "relative"
     },
     backgroundImage: {
         position: 'absolute',
@@ -307,7 +312,7 @@ var styles = StyleSheet.create({
         height: null,
         width: null,
         zIndex: -1
-      },
+    },
     todayContainer: {
         paddingTop: 10,
         paddingBottom: 10,
@@ -316,7 +321,7 @@ var styles = StyleSheet.create({
         //height:120,
         width: '100%',
         marginBottom: 15,
-        backgroundColor:"transparent"
+        backgroundColor: "transparent"
     },
     todayDate: {
         width: '100%',
@@ -354,7 +359,7 @@ var styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 20,
         paddingRight: 20,
-        backgroundColor:"transparent"
+        backgroundColor: "transparent"
         //marginBottom:40
     },
     historyItem: {
@@ -378,10 +383,14 @@ var styles = StyleSheet.create({
 
     loading: {
         flex: 1,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        //flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#ffffff",
-
+        backgroundColor: "rgba(255,255,255,0.5)",
     },
     //历史获取出错
     limit: {
