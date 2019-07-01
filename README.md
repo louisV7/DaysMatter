@@ -1,2 +1,3 @@
-# DaysMatter
-倒数日APP（react naive）
+# 倒数日APP
+react-native开发的Android版APP。
+将项目克隆到本地之后，记得安装依赖再执行，可能会因为版本的问题报错，可根据报错信息自行修改。
