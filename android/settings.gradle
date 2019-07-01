@@ -21,8 +21,7 @@ include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
 
 include ':app'
-//include ':app', ':jpush-react-native
-//project(':jpush-react-native').projectDir = new File(rootProject.projectDir, ../node_modules/jpush-react-native/android')
+
 include ':app', ':jpush-react-native', ':jcore-react-native'
 project(':jpush-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/jpush-react-native/android')
 project(':jcore-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/jcore-react-native/android')

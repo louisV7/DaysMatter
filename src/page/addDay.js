@@ -88,6 +88,7 @@ class AddDaysScreen extends React.Component {
         this.back = this.back.bind(this);
         this.createData = this.createData.bind(this);
     }
+    
     componentDidMount() {
         const that = this;
         const { dayID } = that.state;

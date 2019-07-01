@@ -458,7 +458,7 @@ var styles = StyleSheet.create({
     //fontFamily: '台湾教育部标准楷书',
   },
   topDayDataDate: {
-    //fontFamily: '王汉宗中隶书繁',
+    fontFamily: '王汉宗中隶书繁',
   },
   dayItemContainer: {
 

@@ -11,16 +11,16 @@ const initialState = {
  */
 export default function getWeather(state = initialState, action) {
     switch (action.type) {
-        case TYPES.DAY_ADD_SUCCESS: // ++
+        case TYPES.DAY_ADD_SUCCESS: // 添加成功
             return { message:'success' };
             break;
-        case TYPES.DAY_ADD_FAIL: //--
+        case TYPES.DAY_ADD_FAIL: //添加失败
             return { message:'fail' };
             break;
-        case TYPES.DAY_DELETE_SUCCESS: //--
+        case TYPES.DAY_DELETE_SUCCESS: //删除成功
             return { message:'success' };
             break;
-        case TYPES.DAY_DELETE_FAIL: //--
+        case TYPES.DAY_DELETE_FAIL: //删除失败
             return { message:'fail' };
             break;
         default:
