@@ -156,16 +156,7 @@ export default class DaysScreen extends React.Component {
         const { navigation } = this.props;
         const { themeInfo } = this.state;
         return (
-            <TouchableHighlight
-                onPress={() => {
-                    navigation.push('PastDayDetail', {
-                        id: item.id,
-                        isPast: item.isPast
-                    })
-                }}
-                underlayColor='rgba(0,0,0,0.2)'
-                style={{ height: 45, paddingLeft: 20, paddingRight: 20 }}
-            >
+            <View style={{ height: 45, paddingLeft: 20, paddingRight: 20 }}>
                 <View style={[styles.dayItem, styles.inlineBlock]}>
                     <View style={styles.dayItemLeft}>
                         <Text  style={{ fontSize: 16 }}>{item.title}{item.dateStatus}</Text>
@@ -183,7 +174,7 @@ export default class DaysScreen extends React.Component {
                     </View>
 
                 </View>
-            </TouchableHighlight>
+            </View>
         )
     }
     render() {

@@ -11,6 +11,8 @@ import { PaddingTop } from '../deviceInfo.js';
 //引入主题配置文件
 import { theme } from '../theme.js';
 import { STATUS_BAR_HEIGHT } from '../deviceInfo.js';
+
+
 const height = STATUS_BAR_HEIGHT + 44;
 const year = 2019;
 const key = '50c6f7517446dbb4d803a1c7f962ebaf';

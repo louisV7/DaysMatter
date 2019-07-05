@@ -12,9 +12,16 @@ const delete_success=function(){
 const delete_fail=function(){
     return {type:TYPES.DAY_DELETE_FAIL};
 }
+function swiper_index(swiper_index,isPast){
+    return {type:TYPES.SWIPER_INDEX,index:swiper_index,isPast:isPast};
+}
+//const swiper_index=function(){
+   // return {type:TYPES.SWIPER_INDEX};
+//}
 export {
     increase_success,
     increase_fail,
     delete_success,
-    delete_fail
+    delete_fail,
+    swiper_index
 }

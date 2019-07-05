@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, FlatList, ScrollView, ActivityIndicator, TouchableHighlight, Image, StatusBar } from "react-native";
+import { View, StyleSheet, Text, FlatList, ScrollView, ActivityIndicator, TouchableHighlight, Image, StatusBar,Button } from "react-native";
 import { connect } from 'react-redux';
 import { Card } from 'react-native-shadow-cards';
 import Feather from 'react-native-vector-icons/Feather';//cloud-rain
@@ -12,6 +12,10 @@ import { PaddingTop } from '../deviceInfo.js';
 //引入主题配置文件
 import { theme } from '../theme.js';
 import { STATUS_BAR_HEIGHT } from '../deviceInfo.js';
+
+//引入分享
+import UShare from '../../share/share.js';
+import SharePlatform from '../../share/SharePlatform.js';
 const height = STATUS_BAR_HEIGHT + 44;
 const historyKey = 'b469258df91094c4b3b82edabcad82c0';
 const weatherKey = 'ede618bbdfe67ab7f4d22558c12f0ad7';
@@ -37,6 +41,7 @@ class HistoryScreen extends React.Component {
             weatherData: {},
             themeInfo: {}
         }
+        this._share=this._share.bind(this);
     }
     componentWillMount() {
         const that = this;
@@ -160,6 +165,17 @@ class HistoryScreen extends React.Component {
                 })
         })
     }
+    /**
+     * 第三方分享
+     * 参数：标题、分享内容、分享链接、图片、平台、分享结果回调
+     */
+    _share() {
+        UShare.share('标题','内容', 'http://baidu.com','http://dev.umeng.com/images/tab2_1.png', SharePlatform.WECHAT,
+        (message) => {
+            // message: 分享成功、分享失败、取消分享
+            // TODO ... 
+        });
+    }
     //历史列表
     historyItem({ item }) {
         const { themeInfo } = this.state;
@@ -173,6 +189,7 @@ class HistoryScreen extends React.Component {
             </View>
         )
     }
+    //<Button style={[styles.historyItemRight]} onPress={()=>this._share()} title='分享'></Button>
     //天气渲染
     weatherRender() {
         const { weatherData } = this.state;

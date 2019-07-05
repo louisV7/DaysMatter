@@ -12,6 +12,10 @@ import org.devio.rn.splashscreen.SplashScreen;
 
 import java.lang.Override;
 import cn.jpush.android.api.JPushInterface;//极光推送
+
+//分享
+import com.daysmatter.module.ShareModule;
+import com.umeng.socialize.UMShareAPI;
 public class MainActivity extends ReactActivity {
 
     @Override
@@ -24,6 +28,8 @@ public class MainActivity extends ReactActivity {
         
 
         JPushInterface.init(this);//极光推送
+
+        ShareModule.initActivity(this);//分享
     }
     /**
      * Returns the name of the main component registered from JavaScript.

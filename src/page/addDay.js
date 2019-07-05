@@ -279,8 +279,12 @@ class AddDaysScreen extends React.Component {
                 if (res) {
                     _readFile(fileName, function (res) {
                         data = JSON.parse(res);
-                        data.splice(dayID, 1);
-                        that.updateRedux('delete', data);
+                        for(let i=0;i<data.length;i++){
+                            if(data[i].id==dayID){
+                                data.splice(i, 1);
+                                that.updateRedux('delete', data);
+                            }
+                        }
                     })
                 } else {
 
