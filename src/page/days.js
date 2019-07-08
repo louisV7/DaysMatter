@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';//https://oblador.github.io/react-native-vector-icons/图标地址
 import AsyncStorage from '@react-native-community/async-storage';
 import JPushModule from 'jpush-react-native';//极光推送
+import { createStackNavigator, createAppContainer, createBottomTabNavigator,createDrawerNavigator } from 'react-navigation';
+
 import { calendar } from '../api.js';
 import { getDiffDate, getDay, repeatDate, insert_sort } from '../util.js';
 import { _deleteFile, _writeFile, _readFile, _fileEx } from '../react_native_fs.js';
@@ -21,6 +23,16 @@ const themeBgImg = theme.bg[0];
 class DaysScreen extends React.Component {
   //标题
   static navigationOptions = ({ navigation }) => ({
+    headerLeft:(
+      <TouchableHighlight
+        onPress={()=>navigation.openDrawer()}
+        underlayColor='rgba(0,0,0,0.2)'
+        style={{ marginLeft: 20, width: 35, height: 35, borderRadius: 50, justifyContent: "center", alignItems: "center", }}
+      >
+        <Ionicons name='md-menu' size={27} color="#666666" />
+      </TouchableHighlight>
+    ),
+    
     headerRight: (
       <TouchableHighlight
         onPress={() => navigation.push('AddDay', {
@@ -41,6 +53,7 @@ class DaysScreen extends React.Component {
       loaded: false,//是否加载完成
       themeInfo: {}
     }
+    //this.Drawer_navigation=this.Drawer_navigation.bind(this);
   }
   /*
   
@@ -52,7 +65,6 @@ class DaysScreen extends React.Component {
   componentDidMount() {
     const that = this;
     that.getThemeBgImg();
-    
     _fileEx(fileName, function (res) {
       if (res) {
         that.updateData();
@@ -112,6 +124,7 @@ class DaysScreen extends React.Component {
       }
     }
   }
+  
   //获取背景图
   getThemeBgImg() {
     const that = this;
@@ -421,9 +434,8 @@ class DaysScreen extends React.Component {
     </View>;
   }
 }
-/*
 
-*/
+
 var styles = StyleSheet.create({
   block: {
     flexDirection: "column",

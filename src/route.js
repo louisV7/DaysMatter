@@ -8,8 +8,9 @@ import History from './page/history.js';
 import PastDayDetail from './page/pastDayDetail.js';
 import Setting from './page/setting';
 import BackGround from './page/backGround.js';
+import Menu from './page//menu.js';
 
-import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator, createAppContainer, createBottomTabNavigator,createDrawerNavigator } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';//https://oblador.github.io/react-native-vector-icons/图标地址
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { STATUS_BAR_HEIGHT } from './deviceInfo.js';
@@ -36,8 +37,29 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
     return <IconComponent name={iconName} size={25} color={tintColor} />;
 };
 
+//侧滑抽屉
 
+const MyDrawerNavigator=createDrawerNavigator(
+    {
+        Menu: {
+            screen: Menu,
+            navigationOptions: {
+                title: '倒数日',
+                headerStyle: {
+                    backgroundColor: 'rgba(255,255,255,0.5)',
+                    height: height,
+                    paddingTop: paddingTop
+                },
+                headerTintColor: '#666',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+                headerTransparent: true
+            }
+        },
+    })
 
+//底部tabbar
 const TabNavigator = createBottomTabNavigator(
     {
         Days: createStackNavigator(
@@ -57,7 +79,7 @@ const TabNavigator = createBottomTabNavigator(
                         },
                         headerTransparent: true
                     }
-                }
+                },
             }
         ),
         History: createStackNavigator(
@@ -118,7 +140,7 @@ const TabNavigator = createBottomTabNavigator(
     }
 );
 //创建全局导航器createStackNavigator
-export const Router = createStackNavigator(
+ const StackNavigator = createStackNavigator(
     {
         bottomTabNavigator: {
             screen: TabNavigator,
@@ -153,3 +175,25 @@ export const Router = createStackNavigator(
         }
     }
 )
+// 带有侧滑页的
+export const DrawerNavigator = createDrawerNavigator(
+    {
+        StackNavigator: { 
+            screen: StackNavigator
+        },
+    },
+    {
+        //drawerWidth: Screen.width * 0.9, // 展示的宽度
+        drawerPosition: 'left', // 抽屉在左边还是右边
+        contentComponent: Menu, // 自定义侧滑栏
+        // swipeEnabled: false
+    },
+    
+);
+
+// 应用总的路由栈
+/*export const AppNavigator = createStackNavigator({ DrawerNavigator }, {
+    defaultNavigationOptions: {
+        header: null
+    }
+});*/

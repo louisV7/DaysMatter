@@ -15,8 +15,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Provider } from 'react-redux';
 import configureStore from './src/redux/store/store.js';
 //引入路由文件
-import { Router } from './src/route.js';
-const AppContainer = createAppContainer(Router);
+import { DrawerNavigator } from './src/route.js';
+const AppContainer = createAppContainer(DrawerNavigator);
 const store = configureStore();//创建store
 
 export default class App extends React.Component {
