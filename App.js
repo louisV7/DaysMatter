@@ -36,14 +36,16 @@ export default class App extends React.Component {
   componentWillUnmount() {
     this.timer && clearTimeout(this.timer);//同时为真的才执行卸载
   }
-  render() {
-    return (
-      <Provider store={store}>
-        <StatusBar
+  /*
+  <StatusBar
           translucent={true}
           backgroundColor="transparent"
           barStyle="light-content"
         />
+  */
+  render() {
+    return (
+      <Provider store={store}>
         <AppContainer />
       </Provider>
     )

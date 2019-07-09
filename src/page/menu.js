@@ -42,7 +42,7 @@ class MenuScreen extends React.Component {
                     >
                         <View style={styles.classify_item}>
                             <View style={{ width: 30, flexDirection: "row", alignItems: "center", justifyContent: "center", }}>
-                                <FontAwesome5 name='qrcode' size={30} color="#B6BBBC"></FontAwesome5>
+                                <FontAwesome5 name='qrcode' size={25} color="#B6BBBC"></FontAwesome5>
                             </View>
                             <Text style={styles.classify_item_title}>全部</Text>
                             <Text style={styles.classify_item_num}>0</Text>
@@ -54,7 +54,7 @@ class MenuScreen extends React.Component {
                     >
                         <View style={styles.classify_item}>
                             <View style={{ width: 30, flexDirection: "row", alignItems: "center", justifyContent: "center", }}>
-                                <AntDesign name='heart' size={30} color="#B6BBBC"></AntDesign>
+                                <AntDesign name='heart' size={25} color="#B6BBBC"></AntDesign>
                             </View>
                             <Text style={styles.classify_item_title}>纪念日</Text>
                             <Text style={styles.classify_item_num}>0</Text>
@@ -66,7 +66,7 @@ class MenuScreen extends React.Component {
                     >
                         <View style={styles.classify_item}>
                             <View style={{ width: 30, flexDirection: "row", alignItems: "center", justifyContent: "center", }}>
-                                <FontAwesome5 name='home' size={30} color="#B6BBBC"></FontAwesome5>
+                                <FontAwesome5 name='home' size={25} color="#B6BBBC"></FontAwesome5>
                             </View>
                             <Text style={styles.classify_item_title}>生活</Text>
                             <Text style={styles.classify_item_num}>0</Text>
@@ -79,7 +79,7 @@ class MenuScreen extends React.Component {
                     >
                         <View style={styles.classify_item}>
                             <View style={{ width: 30, flexDirection: "row", alignItems: "center", justifyContent: "center", }}>
-                                <FontAwesome name='history' size={30} color="#666"></FontAwesome>
+                                <FontAwesome name='history' size={25} color="#666"></FontAwesome>
                             </View>
                             <Text style={[styles.classify_item_title, { color: '#666' }]}>History</Text>
                         </View>
@@ -90,7 +90,7 @@ class MenuScreen extends React.Component {
                     >
                         <View style={styles.classify_item}>
                             <View style={{ width: 30, flexDirection: "row", alignItems: "center", justifyContent: "center", }}>
-                                <AntDesign name='setting' size={30} color="#666"></AntDesign>
+                                <AntDesign name='setting' size={25} color="#666"></AntDesign>
                             </View>
                             <Text style={[styles.classify_item_title, { color: '#666' }]}>Setting</Text>
                         </View>

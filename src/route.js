@@ -37,27 +37,6 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
     return <IconComponent name={iconName} size={25} color={tintColor} />;
 };
 
-//侧滑抽屉
-
-const MyDrawerNavigator=createDrawerNavigator(
-    {
-        Menu: {
-            screen: Menu,
-            navigationOptions: {
-                title: '倒数日',
-                headerStyle: {
-                    backgroundColor: 'rgba(255,255,255,0.5)',
-                    height: height,
-                    paddingTop: paddingTop
-                },
-                headerTintColor: '#666',
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                },
-                headerTransparent: true
-            }
-        },
-    })
 
 //底部tabbar
 const TabNavigator = createBottomTabNavigator(
@@ -77,7 +56,7 @@ const TabNavigator = createBottomTabNavigator(
                         headerTitleStyle: {
                             fontWeight: 'bold',
                         },
-                        headerTransparent: true
+                        headerTransparent: true,
                     }
                 },
             }
@@ -145,10 +124,9 @@ const TabNavigator = createBottomTabNavigator(
         bottomTabNavigator: {
             screen: TabNavigator,
             navigationOptions: {
-                header: null
+                header: null,
             }
         },
-        //全局的stack 
         AddDay: {
             screen: AddDay,
         },

@@ -114,7 +114,50 @@ export function getTodayDate(targetDate) {
     }
 }
 
+//计算日期差
+export function get_time_diff(date) {
+    var diff = '';
+    var time=new Date(date.replace(/-/ig, '/')).getTime()
+    var time_diff = time - new Date().getTime(); //时间差的毫秒数 
 
+    //计算出相差天数 
+    var days = Math.floor(time_diff / (24 * 3600 * 1000));
+    if (days > 0) {
+        diff += days + '天';
+    }
+    //计算出小时数 
+    var leave1 = time_diff % (24 * 3600 * 1000);
+    var hours = Math.floor(leave1 / (3600 * 1000));
+    if (hours > 0) {
+        diff += hours + '小时';
+    } else {
+        if (diff !== '') {
+            diff += hours + '小时';
+        }
+    }
+    //计算相差分钟数 
+    var leave2 = leave1 % (3600 * 1000);
+    var minutes = Math.floor(leave2 / (60 * 1000));
+    if (minutes > 0) {
+        diff += minutes + '分';
+    } else {
+        if (diff !== '') {
+            diff += minutes + '分';
+        }
+    }
+    //计算相差秒数 
+    var leave3 = leave2 % (60 * 1000);
+    var seconds = Math.round(leave3 / 1000);
+    if (seconds > 0) {
+        diff += seconds + '秒';
+    } else {
+        if (diff !== '') {
+            diff += seconds + '秒';
+        }
+    }
+    //setTimeout(get_time_diff(date),1000)
+    return diff;
+}	
 //计算到今天的天数
 export function getDiffDate(targetDate) {
     let result = {};

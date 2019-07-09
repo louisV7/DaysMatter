@@ -220,7 +220,7 @@ export default class DaysScreen extends React.Component {
                     ref={scrollView => {
                         if(scrollView !== null){
                             setTimeout(()=>{
-                                scrollView.scrollTo({x:currentImgIndex*60,y:0,animated:true},1) 
+                                scrollView.scrollTo({x:currentImgIndex*50,y:0,animated:true},1) 
                             })
                         }}}
                      showsHorizontalScrollIndicator={false}>

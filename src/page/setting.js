@@ -31,6 +31,7 @@ export default class DaysScreen extends React.Component {
                         </View>
                     </View>
                 </TouchableHighlight>
+                
             </View>
         )
     }
@@ -63,5 +64,6 @@ var styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "flex-end",
-    }
+    },
+   
 })
