@@ -1,7 +1,7 @@
 package com.daysmatter;
 
 import com.facebook.react.ReactActivity;
-
+//为了完成 react-native-gesture-handler在 Android 上的安装
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
@@ -39,7 +39,7 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "DaysMatter";
     }
-
+//为了完成 react-native-gesture-handler在 Android 上的安装
     @Override
     protected ReactActivityDelegate createReactActivityDelegate() {
         return new ReactActivityDelegate(this, getMainComponentName()) {

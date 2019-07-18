@@ -240,6 +240,10 @@ class HistoryScreen extends React.Component {
         const { navigation } = this.props;
         return (
             <View style={[styles.container, { paddingTop: PaddingTop }]}>
+                <StatusBar
+                    animated={true}
+                    barStyle="dark-content"
+                />
                 {
                     JSON.stringify(this.state.themeInfo) != '{}' ? <Image resizeMode='cover' source={{ uri: this.state.themeInfo.img }} style={styles.backgroundImage} /> : null
                 }

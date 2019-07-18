@@ -16,6 +16,11 @@ import { Provider } from 'react-redux';
 import configureStore from './src/redux/store/store.js';
 //引入路由文件
 import { DrawerNavigator } from './src/route.js';
+
+import { STATUS_BAR_HEIGHT } from './src/deviceInfo.js';
+import {theme} from './src/theme.js';
+const height = STATUS_BAR_HEIGHT + 44;
+const paddingTop = STATUS_BAR_HEIGHT;
 const AppContainer = createAppContainer(DrawerNavigator);
 const store = configureStore();//创建store
 
@@ -46,7 +51,11 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <AppContainer />
+        <StatusBar
+          animated={true}
+          barStyle="dark-content"
+        />
+        <AppContainer  screenProps={{height:height,paddingTop:paddingTop,themeColor:theme.themeColor}}/>
       </Provider>
     )
   }

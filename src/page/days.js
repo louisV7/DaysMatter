@@ -425,6 +425,10 @@ class DaysScreen extends React.Component {
   render() {
     const { themeInfo,daysData } = this.state;
     return <View style={[styles.container, { paddingTop: PaddingTop }]} >
+      <StatusBar
+          animated={true}
+          barStyle="dark-content"
+        />
       {
         JSON.stringify(themeInfo) != "{}" ? <Image resizeMode='cover' source={{ uri: themeInfo.img }} style={styles.backgroundImage} /> : null
       }

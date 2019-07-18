@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, ScrollView, SafeAreaView } from "react-native";
+import { View, StyleSheet, TouchableHighlight, Text, ScrollView, SafeAreaView,StatusBar } from "react-native";
 import { connect } from 'react-redux';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -25,6 +25,10 @@ class MenuScreen extends React.Component {
         //在这里跳转页面不能使用push
         return (
             <ScrollView>
+                <StatusBar
+                    animated={true}
+                    barStyle="light-content"
+                />
                 <SafeAreaView style={styles.container}>
                     <View style={[styles.header, { height: height, backgroundColor: theme.themeColor }]}>
                         <TouchableHighlight

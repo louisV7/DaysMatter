@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, StatusBar, FlatList,ActivityIndicator } from "react-native";
+import { View, StyleSheet, TouchableHighlight, Text, StatusBar, ActivityIndicator } from "react-native";
 import { connect } from 'react-redux';
 import { Card } from 'react-native-shadow-cards';
 import LinearGradient from 'react-native-linear-gradient';
@@ -168,6 +168,10 @@ class PastDayDetail extends React.Component {
         return (
             loaded?
             <View style={styles.container}>
+                <StatusBar
+                    animated={true}
+                    barStyle="light-content"
+                />
                 <Swiper style={styles.wrapper} 
                         horizontal={true} 
                         showsPagination={false} 

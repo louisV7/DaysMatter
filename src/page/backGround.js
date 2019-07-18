@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar, Platform, StyleSheet, View, Text, TouchableHighlight, ScrollView, Image, FlatList } from "react-native";
+import { StatusBar, StyleSheet, View, Text, TouchableHighlight, ScrollView, Image, FlatList } from "react-native";
 import Foundation from 'react-native-vector-icons/Foundation';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -182,6 +182,10 @@ export default class DaysScreen extends React.Component {
         const {imgData, topDayData, daysData, currentImg,currentImgIndex } = this.state;
         return (
             <View style={[styles.container]}>
+                <StatusBar
+                    animated={true}
+                    barStyle="light-content"
+                />
                 <View style={styles.styleShow}>
                     <View style={styles.daysPage}>
                         <View style={styles.header}>

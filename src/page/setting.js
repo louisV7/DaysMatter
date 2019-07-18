@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar, Platform, StyleSheet, View, Text, TouchableHighlight } from "react-native";
+import { StatusBar, StyleSheet, View, Text, TouchableHighlight } from "react-native";
 import Foundation from 'react-native-vector-icons/Foundation';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { PaddingTop } from '../deviceInfo.js';
@@ -22,6 +22,10 @@ export default class DaysScreen extends React.Component {
         const { navigation } = this.props;
         return (
             <View style={[styles.container]}>
+                <StatusBar
+                    animated={true}
+                    barStyle="light-content"
+                />
                 <TouchableHighlight style={styles.setItem} underlayColor='rgba(0,0,0,0.2)' onPress={() => navigation.push('BackGround')}>
                     <View style={{flex:1,flexDirection: "row",justifyContent: "center",alignItems: "center",}}>
                         <Foundation style={styles.itemleft} name='background-color' size={25} color="#999999"></Foundation>

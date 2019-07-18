@@ -351,6 +351,10 @@ class AddDaysScreen extends React.Component {
         const { title, isTop, date, week, dayID, isRepeat, confirmModalVisible, message, repeatText, switchThumbColor, repeatModalVisible } = this.state;
         return (
             <View style={styles.container}>
+                <StatusBar
+                    animated={true}
+                    barStyle="light-content"
+                />
                 <View style={[styles.header, { height: height, backgroundColor: theme.themeColor }]}>
                     <View style={{ width: 55}}>
                         <TouchableHighlight
